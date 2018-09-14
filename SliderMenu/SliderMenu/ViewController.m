@@ -62,14 +62,13 @@
     
 }
 
-- (void)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
+- (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"didSelect-index:%ld",index);
+    return true;
+    
 }
 
-- (void)deleteItem:(NSIndexPath *)indexPath{
-    
-    
-}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

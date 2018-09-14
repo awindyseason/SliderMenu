@@ -15,7 +15,7 @@
 
 @optional
 
-- (void)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath;
 
 
 @end

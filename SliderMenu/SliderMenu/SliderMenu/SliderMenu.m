@@ -104,7 +104,9 @@ static SliderMenu *shared = nil;
 }
 - (void)action:(UIButton *)btn{
     if ([_currentCell.delegate respondsToSelector:@selector(didSelectIndex:atIndexPath:)]) {
-        [_currentCell.delegate didSelectIndex:btn.tag - 100 atIndexPath:self.indexPath];
+       if ([_currentCell.delegate didSelectIndex:btn.tag - 100 atIndexPath:self.indexPath]){
+           [self close];
+       }
     }
     
 }
