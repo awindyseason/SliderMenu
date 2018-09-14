@@ -30,7 +30,7 @@
 - (void)prepare{
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.menu = SliderMenu.shared;
-//    self.menu.currentOffset = 0;
+    //    self.menu.currentOffset = 0;
     
     _pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
     _pan.delegate = self;
@@ -52,14 +52,10 @@
         if ( ABS(offsety) > 0) {
             if (self.menu.currentCell) {
                 [self.menu.currentCell openMenu:false time:0.4];
-                
             }
             return false;
         }
-    }else{
-        
     }
-    
     return true;
 }
 
@@ -72,10 +68,10 @@
         offsetX = 0;
     }
     
-    if ( self.menu.lock ) { // 抽屉执行关闭动画后才能进行下次打开
+    if ( self.menu.lock ) { // 关闭动画完成后才能进行下次打开
         //  取消手势
-//        _pan.enabled = false;
-//        _pan.enabled = true;
+        //        _pan.enabled = false;
+        //        _pan.enabled = true;
         accumulation = -panX;
         return;
     }else{
@@ -94,7 +90,7 @@
             return;
             
         }
-
+        
     }else if (pan.state == UIGestureRecognizerStateChanged){
         
         if (panX > 0&&[self.menu.currentCell isEqual:self]) {
@@ -118,18 +114,21 @@
         accumulation = 0;
         CGPoint speed = [pan velocityInView:self];
         
-        CGFloat time = 0.3;
+        CGFloat time = 0.4;
         
         if (offsetX < 0.5 * self.menu.totalWidth) {// 开
             
-            time = MIN( ABS((self.menu.totalWidth - offsetX)*1.8/speed.x),time);
+            time = MIN(ABS((self.menu.totalWidth - offsetX)*1.8/speed.x),time);
             
             [self openMenu:true time:time];
+            
             
         }else{
             
             time = MIN( ABS(offsetX*1.8/speed.x),time);
+            
             [self openMenu:false time:time];
+            
             
         }
     }
@@ -148,17 +147,14 @@
     } completion:^(BOOL finished) {
         if (flag) {
             self.menu.state = SliderMenuOpen;
-            
         }else{
             self.menu.state = SliderMenuClose;
             self.menu.lock = false;
             [self.menu releaseFromCell];
-            
         }
-        
     }];
-    
 }
+
 
 - (void)move:(CGFloat)x{
     self.transform = CGAffineTransformMakeTranslation(x, 0);
@@ -171,7 +167,7 @@
     if ( [self.menu.view pointInside:newP withEvent:event])
     {
         return [self.menu.view hitTest:newP withEvent:event];
- 
+        
     }
     return [super hitTest:point withEvent:event];
 }
