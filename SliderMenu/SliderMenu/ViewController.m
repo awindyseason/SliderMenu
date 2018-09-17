@@ -24,7 +24,6 @@
     UIBarButtonItem *barItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     self.navigationItem.rightBarButtonItem = barItem;
    
-    
     _datas = @[@"0",@"1",@"2",@"3",@"4"].mutableCopy;
     _tv = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _tv.dataSource = self;
@@ -53,6 +52,7 @@
     return cell;
     
 }
+
 // === SliderDelegate ===
 - (NSArray<MenuItem *> *)sliderMenuItemsForIndexPath:(NSIndexPath *)indexPath{
     /*
@@ -74,16 +74,16 @@
 - (NSString *)sliderMenuReuseIdentifier{
     return @"EditWithDelete";
 }
-// 返回
+
+// return ture == 自动关闭 == [[SliderMenu shared] close];
 - (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"didSelectIndex:%ld row:%ld",index,indexPath.row);
     if (index == 1){
         [_datas removeObjectAtIndex:indexPath.row];
         // deleteRow貌似是让cell做了transform后hidden掉 并非真的delete
-        // 删除cell本身有动画，跟menu关闭动画有影响 return false即可。
         [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
-    // return ture == 自动关闭 == [[SliderMenu shared] close];
+    
     return false;
     
 }

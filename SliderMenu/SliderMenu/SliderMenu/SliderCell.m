@@ -1,14 +1,9 @@
-//
-//  SliderCell.m
-//  Cell
-//
-//  Created by YH on 2018/7/3.
-//  Copyright © 2018年 XCY. All rights reserved.
-//
 
 #import "SliderCell.h"
 #import "SliderMenu.h"
+
 @interface SliderCell()<UIGestureRecognizerDelegate>
+
 @property (weak, nonatomic) SliderMenu *menu;
 @property (strong, nonatomic) UIPanGestureRecognizer *pan;
 
@@ -67,10 +62,9 @@
 }
 
 - (void)pan:(UIPanGestureRecognizer *)pan{
-    
+
     CGFloat panX = [pan translationInView:pan.view].x;
     CGFloat offsetX = panX + _menu.currentOffset;
-    //    NSLog(@"===%f",_menu.currentOffset);
     if ( offsetX > 0) {
         offsetX = 0;
     }
@@ -131,9 +125,9 @@
             [self openMenu:true time:time];
             
         }else{
+            
             time = MIN( ABS(offsetX*1.8/speed.x),time);
             [self openMenu:false time:time];
-            
             
         }
     }
@@ -159,7 +153,6 @@
         }
     }];
 }
-
 
 - (void)move:(CGFloat)x{
     self.transform = CGAffineTransformMakeTranslation(x, 0);

@@ -9,12 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @class MenuItem;
+
 @protocol SliderMenuDelegate
+
 /**
  * @return menu 的 items对象
  */
 - (NSArray<MenuItem *> *)sliderMenuItemsForIndexPath:(NSIndexPath *)indexPath;
-
 
 @optional
 
@@ -24,8 +25,8 @@
  * menu不是同一样式,不设置此方法、或者返回nil;
  * @return 复用identify
  */
-
 - (NSString *)sliderMenuReuseIdentifier;
+
 /**
  * @return 点击后是否自动关闭 ture：关闭 
  */
