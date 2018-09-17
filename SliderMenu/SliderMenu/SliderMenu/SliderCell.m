@@ -35,8 +35,14 @@
     _pan.delegate = self;
     [self.contentView addGestureRecognizer:_pan];
 }
-
-
+/* 点击关闭
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [super touchesBegan:touches withEvent:event];
+    if ([SliderMenu shared].state == SliderMenuOpen) {
+        [[SliderMenu shared] close];
+    }
+}
+ */
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return true;
 }
@@ -113,14 +119,13 @@
         accumulation = 0;
         CGPoint speed = [pan velocityInView:self];
         CGFloat time = 0.4;
-        
+        // time 根据滑动手势快慢 自适应改变
         if (offsetX < 0.5 * _menu.totalWidth) {// 开
-            
+
             time = MIN(ABS((_menu.totalWidth - offsetX)*1.8/speed.x),time);
             [self openMenu:true time:time];
             
         }else{
-            
             time = MIN( ABS(offsetX*1.8/speed.x),time);
             [self openMenu:false time:time];
             
