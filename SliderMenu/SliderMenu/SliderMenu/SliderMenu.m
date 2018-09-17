@@ -25,9 +25,7 @@ static SliderMenu *shared = nil;
 }
 
 - (void)transform:(CGFloat)x{
-    //        if ([_currentCell.delegate respondsToSelector:@selector(willDisplayView:)]) {
-    //            [_currentCell.delegate willDisplayView:btn];
-    //        }
+  
     CGFloat offsetx = x;
     CGFloat offsetWidth = 0.0;
     
@@ -41,12 +39,10 @@ static SliderMenu *shared = nil;
 }
 - (void)reset{
     if (_view.superview){
-        self.currentCell.contentView.transform = CGAffineTransformIdentity;
+        _currentCell.contentView.transform = CGAffineTransformIdentity;
         [_view removeFromSuperview];
         _indexPath = nil;
-        //        _view = nil;
         _currentCell = nil;
-        //        _totalWidth = 0;
         _currentOffset = 0;
         _menuItems = nil;
         

@@ -1,15 +1,7 @@
-//
-//  Menu.h
-//  Cell
-//
-//  Created by YH on 2018/7/3.
-//  Copyright © 2018年 XCY. All rights reserved.
-//
+
 
 #import <UIKit/UIKit.h>
 #import "SliderCell.h"
-@class SliderCell;
-@class MenuItem;
 
 // 当前menu状态
 typedef NS_ENUM(NSInteger,SliderMenuState) {
