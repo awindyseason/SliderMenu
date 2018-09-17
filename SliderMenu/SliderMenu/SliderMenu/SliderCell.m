@@ -15,6 +15,7 @@
 @end
 
 @implementation SliderCell{
+    //使 menu 连贯从一个cell到另一个cell 需要计算的积累量
     CGFloat accumulation;
 }
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -37,12 +38,12 @@
     [self.contentView addGestureRecognizer:_pan];
 }
 /* 点击关闭
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [super touchesBegan:touches withEvent:event];
-    if ([SliderMenu shared].state == SliderMenuOpen) {
-        [[SliderMenu shared] close];
-    }
-}
+ - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+ [super touchesBegan:touches withEvent:event];
+ if ([SliderMenu shared].state == SliderMenuOpen) {
+ [[SliderMenu shared] close];
+ }
+ }
  */
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return true;
@@ -82,6 +83,7 @@
         return;
     }else{
         offsetX = panX + _menu.currentOffset  + accumulation;
+        
         if (!_menu.view.superview) {
             [_menu menuForCell:self];
         }
@@ -90,11 +92,13 @@
     if (pan.state == UIGestureRecognizerStateBegan){
         
         if (_menu.currentCell  && ![_menu.currentCell isEqual:self] ) {
-            
             _menu.lock = true;
-            [_menu.currentCell openMenu:false time:0.4];
+            if (_menu.currentCell.hidden) {
+                [_menu.currentCell openMenu:false time:0];
+            }else{
+                [_menu.currentCell openMenu:false time:0.4];
+            }
             return;
-            
         }
         
     }else if (pan.state == UIGestureRecognizerStateChanged){
@@ -122,7 +126,7 @@
         CGFloat time = 0.4;
         // time 根据滑动手势快慢 自适应改变
         if (offsetX < 0.5 * _menu.totalWidth) {// 开
-
+            
             time = MIN(ABS((_menu.totalWidth - offsetX)*1.8/speed.x),time);
             [self openMenu:true time:time];
             

@@ -73,9 +73,9 @@
     NSLog(@"didSelectIndex:%ld row:%ld",index,indexPath.row);
     if (index == 1){
         [_datas removeObjectAtIndex:indexPath.row];
-        // deleteRow貌似是让cell做了transform 并非真的delete
+        // deleteRow貌似是让cell做了transform后hidden掉 并非真的delete
+        // 删除cell本身有动画，跟menu关闭动画有影响 既return false就行。
         [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-
     }
     // ture == 自动关闭
     return false;

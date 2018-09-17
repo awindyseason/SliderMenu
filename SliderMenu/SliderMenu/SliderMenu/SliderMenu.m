@@ -53,6 +53,7 @@ static SliderMenu *shared = nil;
     }
 }
 - (void)releaseView{
+    [self reset];
     self.view = nil;
     self.totalWidth = 0;
     self.reuseIdent = nil;
