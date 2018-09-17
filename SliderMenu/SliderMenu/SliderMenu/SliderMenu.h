@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 
 - (void)releaseFromCell;
 - (void)menuForCell:(SliderCell *)cell;
-- (void)move:(CGFloat)x;
+- (void)transform:(CGFloat)x;
 - (void)close;
 
 @end
@@ -39,9 +39,15 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 @interface MenuItem:NSObject
 
 @property (strong, nonatomic) NSString *title;
-@property (assign, nonatomic) CGFloat width;
 @property (strong, nonatomic) UIColor *bgcolor;
+
+@property (assign, nonatomic) CGFloat width;
+@property (strong, nonatomic) UIColor *titleColor;
+@property (strong, nonatomic) UIFont *font;
+
++ (instancetype)title:(NSString *)title bgcolor:(UIColor *)bgcolor;
 @end
+
 @interface SliderView:UIView
 @end
 

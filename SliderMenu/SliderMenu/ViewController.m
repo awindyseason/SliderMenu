@@ -13,58 +13,66 @@
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,SliderDelegate>
 
 @property (strong, nonatomic) UITableView *tv;
-
+@property (strong, nonatomic) NSMutableArray *datas;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"SliderMenu";
+    UIBarButtonItem *barItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    self.navigationItem.rightBarButtonItem = barItem;
+    
+    _datas = @[@"0",@"1",@"2",@"3"].mutableCopy;
     _tv = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _tv.dataSource = self;
     _tv.rowHeight = 50;
-
+    _tv.tableFooterView = UIView.new;
     [self.view addSubview:_tv];
     [_tv registerClass:SliderCell.class forCellReuseIdentifier:@"slidercell"];
+    
 }
-
+- (void)close{
+    [[SliderMenu shared] close];
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return _datas.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     SliderCell *cell = [_tv dequeueReusableCellWithIdentifier:@"slidercell"];
-    cell.textLabel.text = @(indexPath.row).stringValue;
     cell.delegate = self;
-    if (indexPath.row % 2 == 0) {
-        cell.backgroundColor = UIColor.yellowColor;
-    }else{
-        cell.backgroundColor = UIColor.blueColor;
-    }
+    
+    cell.textLabel.text = [_datas objectAtIndex:indexPath.row];
+    cell.backgroundColor = indexPath.row % 2 ? UIColor.yellowColor : UIColor.blueColor;
+    
     return cell;
     
 }
 
-
 - (NSArray<MenuItem *> *)itemsForIndexPath:(NSIndexPath *)indexPath{
-    MenuItem *item1 = [MenuItem new];
-    item1.title = @"编辑";
-    item1.width = 80;
-    item1.bgcolor = [UIColor brownColor];
-    MenuItem *item2 = [MenuItem new];
-    item2.title = @"删除";
-    item2.width = 80;
-    item2.bgcolor = [UIColor redColor];
-    
+    /*
+     title bgcolor font width titleColor
+     */
+    MenuItem *item1 = [MenuItem title:@"编辑" bgcolor:UIColor.brownColor];
+    MenuItem *item2 = [MenuItem title:@"删除" bgcolor:UIColor.redColor];
+
     return @[item1,item2];
     
 }
 
 - (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"didSelect-index:%ld",index);
-    return true;
+    if (index == 0){
+        return false;
+    }else{
+        [_datas removeObjectAtIndex:indexPath.row];
+        [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        return true; // true == 自动关闭menu
+    }
     
 }
 
