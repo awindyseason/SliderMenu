@@ -9,23 +9,34 @@
 #import <UIKit/UIKit.h>
 
 @class MenuItem;
-@protocol SliderDelegate
-
-- (NSArray<MenuItem *> *)itemsForIndexPath:(NSIndexPath *)indexPath;
+@protocol SliderMenuDelegate
+/**
+ * @return menu 的 items对象
+ */
+- (NSArray<MenuItem *> *)sliderMenuItemsForIndexPath:(NSIndexPath *)indexPath;
 
 
 @optional
-// 是否复用 (只存在一种menu样式时使用)
-- (NSString *)reuseMenuWithIdentifier;
 
-- (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath;
+/**
+ *  复用说明
+ * menu如果都是统一样式，可设置复用Identifier 。当设置复用时，cell会一直使用第一次创建的menu
+ * menu不是同一样式,不设置此方法、或者返回nil;
+ * @return 复用identify
+ */
+
+- (NSString *)sliderMenuReuseIdentifier;
+/**
+ * @return 点击后是否自动关闭 ture：关闭 
+ */
+- (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath;
 
 
 @end
 
 @interface SliderCell : UITableViewCell
 
-@property (weak, nonatomic) NSObject<SliderDelegate> *delegate;
+@property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
 
 
 - (void)openMenu:(BOOL)flag time:(NSTimeInterval)time;

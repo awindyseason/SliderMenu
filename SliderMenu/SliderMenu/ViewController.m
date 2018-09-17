@@ -10,7 +10,7 @@
 
 #import "SliderCell.h"
 #import "SliderMenu.h"
-@interface ViewController ()<UITableViewDelegate,UITableViewDataSource,SliderDelegate>
+@interface ViewController ()<UITableViewDelegate,UITableViewDataSource,SliderMenuDelegate>
 
 @property (strong, nonatomic) UITableView *tv;
 @property (strong, nonatomic) NSMutableArray *datas;
@@ -45,7 +45,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     SliderCell *cell = [_tv dequeueReusableCellWithIdentifier:@"slidercell"];
-    cell.delegate = self;
+    cell.menuDelegate = self;
     
     cell.textLabel.text = [_datas objectAtIndex:indexPath.row];
     cell.backgroundColor = indexPath.row % 2 ? UIColor.yellowColor : UIColor.blueColor;
@@ -54,7 +54,7 @@
     
 }
 // === SliderDelegate ===
-- (NSArray<MenuItem *> *)itemsForIndexPath:(NSIndexPath *)indexPath{
+- (NSArray<MenuItem *> *)sliderMenuItemsForIndexPath:(NSIndexPath *)indexPath{
     /*
      可设置item属性：title bgcolor font width titleColor
      */
@@ -63,21 +63,27 @@
 
     return @[item1,item2];
     
+    
+    
 }
 
-// 对于只存在一种样式的menu 。可以设置复用 Identifier
-- (NSString *)reuseMenuWithIdentifier{
+/** 复用说明
+ * menu如果都是统一样式，可设置复用Identifier 。当设置复用时，cell会一直使用第一次创建的menu
+ * menu不是同一样式,不设置此方法、或者返回nil;
+ */
+- (NSString *)sliderMenuReuseIdentifier{
     return @"EditWithDelete";
 }
-- (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
+// 返回
+- (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"didSelectIndex:%ld row:%ld",index,indexPath.row);
     if (index == 1){
         [_datas removeObjectAtIndex:indexPath.row];
         // deleteRow貌似是让cell做了transform后hidden掉 并非真的delete
-        // 删除cell本身有动画，跟menu关闭动画有影响 既return false就行。
+        // 删除cell本身有动画，跟menu关闭动画有影响 return false即可。
         [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
-    // ture == 自动关闭
+    // return ture == 自动关闭 == [[SliderMenu shared] close];
     return false;
     
 }

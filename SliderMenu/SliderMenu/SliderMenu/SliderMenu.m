@@ -62,10 +62,10 @@ static SliderMenu *shared = nil;
     _currentCell = cell;
     UITableView *tv = (UITableView *)cell.superview;
     _indexPath = [tv indexPathForCell:cell];
-    _menuItems  = [_currentCell.delegate itemsForIndexPath:_indexPath];
+    _menuItems  = [_currentCell.menuDelegate sliderMenuItemsForIndexPath:_indexPath];
     NSString *reuseIdent = nil;
-    if ([_currentCell.delegate respondsToSelector:@selector(reuseMenuWithIdentifier)]) {
-        reuseIdent = [_currentCell.delegate reuseMenuWithIdentifier];
+    if ([_currentCell.menuDelegate respondsToSelector:@selector(sliderMenuReuseIdentifier)]) {
+        reuseIdent = [_currentCell.menuDelegate sliderMenuReuseIdentifier];
     }
     if(!_view || ![_reuseIdent isEqualToString:reuseIdent] ){
         
@@ -115,8 +115,8 @@ static SliderMenu *shared = nil;
     [_view layoutIfNeeded];
 }
 - (void)action:(UIButton *)btn{
-    if ([_currentCell.delegate respondsToSelector:@selector(didSelectIndex:atIndexPath:)]) {
-        if ([_currentCell.delegate didSelectIndex:btn.tag - 100 atIndexPath:self.indexPath]){
+    if ([_currentCell.menuDelegate respondsToSelector:@selector(sliderMenuDidSelectIndex:atIndexPath:)]) {
+        if ([_currentCell.menuDelegate sliderMenuDidSelectIndex:btn.tag - 100 atIndexPath:self.indexPath]){
             [self close];
         }
     }
