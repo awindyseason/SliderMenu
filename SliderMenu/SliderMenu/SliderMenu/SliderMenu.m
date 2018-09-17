@@ -25,7 +25,9 @@ static SliderMenu *shared = nil;
 }
 
 - (void)transform:(CGFloat)x{
-    
+    //        if ([_currentCell.delegate respondsToSelector:@selector(willDisplayView:)]) {
+    //            [_currentCell.delegate willDisplayView:btn];
+    //        }
     CGFloat offsetx = x;
     CGFloat offsetWidth = 0.0;
     
@@ -43,9 +45,9 @@ static SliderMenu *shared = nil;
         self.currentCell.contentView.transform = CGAffineTransformIdentity;
         [_view removeFromSuperview];
         _indexPath = nil;
-        _view = nil;
+        //        _view = nil;
         _currentCell = nil;
-        _totalWidth = 0;
+        //        _totalWidth = 0;
         _currentOffset = 0;
         _menuItems = nil;
     }
@@ -58,51 +60,54 @@ static SliderMenu *shared = nil;
     UITableView *tv = (UITableView *)cell.superview;
     _indexPath = [tv indexPathForCell:cell];
     _menuItems  = [_currentCell.delegate itemsForIndexPath:_indexPath];
-    
-    _view = [SliderView new];
-    _view.backgroundColor = [UIColor clearColor];
-    _view.userInteractionEnabled = true;
-    [cell addSubview:_view];
-    _totalWidth = 0.0;
-    for (int i = 0; i < _menuItems.count; i++) {
-        MenuItem *item = [_menuItems objectAtIndex:i];
-        if (!item.width) {
-            item.width = item.width?:[item.title sizeWithAttributes:@{NSFontAttributeName:item.font}].width + 46;
-        }
-        CGFloat width = item.width;
-        _totalWidth += width;
-        
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn.tag = 100 +i;
-        btn.backgroundColor = item.bgcolor;
-        btn.frame = CGRectMake(0, 0, width, _currentCell.frame.size.height);
-        btn.titleLabel.font = item.font;
-        [btn setTitleColor:item.titleColor forState:UIControlStateNormal];
-        [btn setTitle:item.title forState:UIControlStateNormal];
-        [btn addTarget:self action:@selector(action:) forControlEvents:UIControlEventTouchUpInside];
-        [_view addSubview:btn];
-        
-        
-        UIView *bgview = [UIView new];
-        bgview.tag = 1000 + i;
-        bgview.backgroundColor =  item.bgcolor;
-        bgview.frame = CGRectMake(self.totalWidth, 0, 300, _currentCell.frame.size.height);
-        [_view addSubview:bgview];
-        
-        UIView *lastBGview = [_view viewWithTag:1000 + i-1];
-        if (lastBGview) {
-            [_view insertSubview:bgview aboveSubview:lastBGview];
-        }else{
-            [_view sendSubviewToBack:bgview];
-        }
-        
+    BOOL isReuseIdentifier = false;
+    if ([_currentCell.delegate respondsToSelector:@selector(isReuse)]) {
+        isReuseIdentifier = [_currentCell.delegate isReuse];
     }
-    //        if ([_currentCell.delegate respondsToSelector:@selector(willDisplayView:)]) {
-    //            [_currentCell.delegate willDisplayView:btn];
-    //        }
-    _totalWidth = -_totalWidth;
+    if(!_view || !isReuseIdentifier){
+        _view = [SliderView new];
+        
+        _totalWidth = 0.0;
+        for (int i = 0; i < _menuItems.count; i++) {
+            MenuItem *item = [_menuItems objectAtIndex:i];
+            if (!item.width) {
+                item.width = item.width?:[item.title sizeWithAttributes:@{NSFontAttributeName:item.font}].width + 46;
+            }
+            CGFloat width = item.width;
+            _totalWidth += width;
+            
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+            btn.tag = 100 +i;
+            btn.backgroundColor = item.bgcolor;
+            btn.frame = CGRectMake(0, 0, width, _currentCell.frame.size.height);
+            btn.titleLabel.font = item.font;
+            [btn setTitleColor:item.titleColor forState:UIControlStateNormal];
+            [btn setTitle:item.title forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(action:) forControlEvents:UIControlEventTouchUpInside];
+            [_view addSubview:btn];
+            
+            
+            UIView *bgview = [UIView new];
+            bgview.tag = 1000 + i;
+            bgview.backgroundColor =  item.bgcolor;
+            bgview.frame = CGRectMake(self.totalWidth, 0, 300, _currentCell.frame.size.height);
+            [_view addSubview:bgview];
+            
+            UIView *lastBGview = [_view viewWithTag:1000 + i-1];
+            if (lastBGview) {
+                [_view insertSubview:bgview aboveSubview:lastBGview];
+            }else{
+                [_view sendSubviewToBack:bgview];
+            }
+            
+        }
+        
+        _totalWidth = -_totalWidth;
+        
+        _view.frame = CGRectMake(CGRectGetMaxX(cell.frame), 0, ABS(self.totalWidth), _currentCell.frame.size.height);
+    }
     
-    _view.frame = CGRectMake(CGRectGetMaxX(cell.frame), 0, ABS(self.totalWidth), _currentCell.frame.size.height);
+    [cell addSubview:_view];
     [_view layoutIfNeeded];
 }
 - (void)action:(UIButton *)btn{

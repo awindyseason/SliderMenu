@@ -11,10 +11,11 @@
 @class SliderCell;
 @class MenuItem;
 
+// 当前menu状态
 typedef NS_ENUM(NSInteger,SliderMenuState) {
-    SliderMenuClose,
-    SliderMenuSlider,
-    SliderMenuOpen
+    SliderMenuClose, // 关闭
+    SliderMenuSlider, // 滑动中
+    SliderMenuOpen // 打开
 };
 @class SliderView;
 
@@ -29,10 +30,11 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 
 + (instancetype)shared;
 
-- (void)releaseFromCell;
+
 - (void)menuForCell:(SliderCell *)cell;
 - (void)transform:(CGFloat)x;
 - (void)close;
+- (void)releaseFromCell;
 
 @end
 

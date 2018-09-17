@@ -52,10 +52,10 @@
     return cell;
     
 }
-
+// === SliderDelegate ===
 - (NSArray<MenuItem *> *)itemsForIndexPath:(NSIndexPath *)indexPath{
     /*
-     title bgcolor font width titleColor
+     可设置item属性：title bgcolor font width titleColor
      */
     MenuItem *item1 = [MenuItem title:@"编辑" bgcolor:UIColor.brownColor];
     MenuItem *item2 = [MenuItem title:@"删除" bgcolor:UIColor.redColor];
@@ -64,8 +64,13 @@
     
 }
 
+// menu是否复用，如果所有cell上的menu样式都一样，设置ture
+- (BOOL)isReuse{
+    // default is false
+    return true;
+}
 - (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"didSelect-index:%ld",index);
+    NSLog(@"didSelectIndex:%ld row:%ld",index,indexPath.row);
     if (index == 0){
         return false;
     }else{
