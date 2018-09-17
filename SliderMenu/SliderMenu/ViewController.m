@@ -16,15 +16,18 @@
 @property (strong, nonatomic) NSMutableArray *datas;
 @end
 
-@implementation ViewController
+@implementation ViewController{
+    BOOL b;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"SliderMenu";
     UIBarButtonItem *barItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     self.navigationItem.rightBarButtonItem = barItem;
+   
     
-    _datas = @[@"0",@"1",@"2",@"3"].mutableCopy;
+    _datas = @[@"0",@"1",@"2",@"3",@"4"].mutableCopy;
     _tv = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _tv.dataSource = self;
     _tv.rowHeight = 50;
@@ -64,20 +67,20 @@
     
 }
 
-// menu是否复用，如果所有cell上的menu样式都一样，设置ture
-- (BOOL)isReuse{
-    // default is false
-    return true;
+// 对于只存在一种样式的menu 。可以设置复用 Identifier
+- (NSString *)reuseMenuWithIdentifier{
+    return @"EditWithDelete";
 }
 - (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"didSelectIndex:%ld row:%ld",index,indexPath.row);
-    if (index == 0){
-        return false;
-    }else{
+    if (index == 1){
         [_datas removeObjectAtIndex:indexPath.row];
+        // deleteRow貌似是让cell做了transform 并非真的delete
         [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        return true; // true == 自动关闭menu
+
     }
+    // ture == 自动关闭
+    return false;
     
 }
 

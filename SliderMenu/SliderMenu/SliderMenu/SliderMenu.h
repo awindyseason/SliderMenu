@@ -34,7 +34,8 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 - (void)menuForCell:(SliderCell *)cell;
 - (void)transform:(CGFloat)x;
 - (void)close;
-- (void)releaseFromCell;
+- (void)reset;
+- (void)releaseView;
 
 @end
 

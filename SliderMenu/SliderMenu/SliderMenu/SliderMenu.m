@@ -6,7 +6,7 @@ static SliderMenu *shared = nil;
 @interface SliderMenu()
 @property (strong, nonatomic) NSIndexPath *indexPath;
 @property (strong, nonatomic) NSArray *menuItems;
-
+@property (strong, nonatomic) NSString *reuseIdent;
 @end
 @implementation SliderMenu
 + (instancetype)shared{
@@ -38,9 +38,8 @@ static SliderMenu *shared = nil;
         CGFloat voffsetx = offsetx*offsetWidth/_totalWidth;
         v.transform = CGAffineTransformMakeTranslation(voffsetx, 0);
     }
-    
 }
-- (void)releaseFromCell{
+- (void)reset{
     if (_view.superview){
         self.currentCell.contentView.transform = CGAffineTransformIdentity;
         [_view removeFromSuperview];
@@ -50,21 +49,30 @@ static SliderMenu *shared = nil;
         //        _totalWidth = 0;
         _currentOffset = 0;
         _menuItems = nil;
+        
     }
+}
+- (void)releaseView{
+    self.view = nil;
+    self.totalWidth = 0;
+    self.reuseIdent = nil;
 }
 - (void)close{
     [self.currentCell openMenu:false time:0.25];
 }
+
 - (void)menuForCell:(SliderCell*)cell{
     _currentCell = cell;
     UITableView *tv = (UITableView *)cell.superview;
     _indexPath = [tv indexPathForCell:cell];
     _menuItems  = [_currentCell.delegate itemsForIndexPath:_indexPath];
-    BOOL isReuseIdentifier = false;
-    if ([_currentCell.delegate respondsToSelector:@selector(isReuse)]) {
-        isReuseIdentifier = [_currentCell.delegate isReuse];
+    NSString *reuseIdent = nil;
+    if ([_currentCell.delegate respondsToSelector:@selector(reuseMenuWithIdentifier)]) {
+        reuseIdent = [_currentCell.delegate reuseMenuWithIdentifier];
     }
-    if(!_view || !isReuseIdentifier){
+    if(!_view || ![_reuseIdent isEqualToString:reuseIdent] ){
+        
+        _reuseIdent = reuseIdent;
         _view = [SliderView new];
         
         _totalWidth = 0.0;
@@ -73,6 +81,7 @@ static SliderMenu *shared = nil;
             if (!item.width) {
                 item.width = item.width?:[item.title sizeWithAttributes:@{NSFontAttributeName:item.font}].width + 46;
             }
+            
             CGFloat width = item.width;
             _totalWidth += width;
             
@@ -85,7 +94,6 @@ static SliderMenu *shared = nil;
             [btn setTitle:item.title forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(action:) forControlEvents:UIControlEventTouchUpInside];
             [_view addSubview:btn];
-            
             
             UIView *bgview = [UIView new];
             bgview.tag = 1000 + i;
@@ -103,7 +111,6 @@ static SliderMenu *shared = nil;
         }
         
         _totalWidth = -_totalWidth;
-        
         _view.frame = CGRectMake(CGRectGetMaxX(cell.frame), 0, ABS(self.totalWidth), _currentCell.frame.size.height);
     }
     

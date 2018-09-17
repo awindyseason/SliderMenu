@@ -27,6 +27,7 @@
     [super awakeFromNib];
     [self prepare];
 }
+
 - (void)prepare{
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     _menu = SliderMenu.shared;
@@ -150,7 +151,7 @@
         }else{
             self.menu.state = SliderMenuClose;
             self.menu.lock = false;
-            [self.menu releaseFromCell];
+            [self.menu reset];
         }
     }];
 }
@@ -170,5 +171,8 @@
         
     }
     return [super hitTest:point withEvent:event];
+}
+- (void)dealloc{
+    [[SliderMenu shared] releaseView];
 }
 @end

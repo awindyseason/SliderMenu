@@ -16,7 +16,7 @@
 
 @optional
 // 是否复用 (只存在一种menu样式时使用)
-- (BOOL)isReuse;
+- (NSString *)reuseMenuWithIdentifier;
 
 - (BOOL)didSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath;
 
