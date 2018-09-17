@@ -16,9 +16,7 @@
 @property (strong, nonatomic) NSMutableArray *datas;
 @end
 
-@implementation ViewController{
-    BOOL b;
-}
+@implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
