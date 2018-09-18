@@ -47,7 +47,7 @@
     cell.menuDelegate = self;
     
     cell.textLabel.text = [_datas objectAtIndex:indexPath.row];
-    cell.backgroundColor = indexPath.row % 2 ? UIColor.yellowColor : UIColor.blueColor;
+
     
     return cell;
     
