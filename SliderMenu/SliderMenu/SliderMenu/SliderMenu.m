@@ -33,7 +33,7 @@ static SliderMenu *shared = nil;
         UIView *v = [_view viewWithTag:100 + i];
         UIView *lastv = [_view viewWithTag:100 + i-1];
         offsetWidth += lastv.frame.size.width;
-        CGFloat voffsetx = offsetx*offsetWidth/_totalWidth;
+        CGFloat voffsetx = offsetx*offsetWidth/_maxOffset;
         v.transform = CGAffineTransformMakeTranslation(voffsetx, 0);
     }
 }
@@ -50,9 +50,9 @@ static SliderMenu *shared = nil;
 }
 - (void)releaseView{
     [self reset];
-    self.view = nil;
-    self.totalWidth = 0;
-    self.reuseIdent = nil;
+    _view = nil;
+    _maxOffset = 0;
+    _reuseIdent = nil;
 }
 - (void)close{
     [self.currentCell openMenu:false time:0.25];
@@ -72,7 +72,7 @@ static SliderMenu *shared = nil;
         _reuseIdent = reuseIdent;
         _view = [SliderView new];
         
-        _totalWidth = 0.0;
+        _maxOffset = 0.0;
         for (int i = 0; i < _menuItems.count; i++) {
             MenuItem *item = [_menuItems objectAtIndex:i];
             if (!item.width) {
@@ -80,7 +80,7 @@ static SliderMenu *shared = nil;
             }
             
             CGFloat width = item.width;
-            _totalWidth += width;
+            _maxOffset += width;
             
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
             btn.tag = 100 +i;
@@ -95,7 +95,7 @@ static SliderMenu *shared = nil;
             UIView *bgview = [UIView new];
             bgview.tag = 1000 + i;
             bgview.backgroundColor =  item.bgcolor;
-            bgview.frame = CGRectMake(self.totalWidth, 0, 300, _currentCell.frame.size.height);
+            bgview.frame = CGRectMake(self.maxOffset, 0, 300, _currentCell.frame.size.height);
             [_view addSubview:bgview];
             
             UIView *lastBGview = [_view viewWithTag:1000 + i-1];
@@ -107,8 +107,8 @@ static SliderMenu *shared = nil;
             
         }
         
-        _totalWidth = -_totalWidth;
-        _view.frame = CGRectMake(CGRectGetMaxX(cell.frame), 0, ABS(self.totalWidth), _currentCell.frame.size.height);
+        _maxOffset = -_maxOffset;
+        _view.frame = CGRectMake(CGRectGetMaxX(cell.frame), 0, ABS(self.maxOffset), _currentCell.frame.size.height);
     }
     
     [cell addSubview:_view];
@@ -140,11 +140,12 @@ static SliderMenu *shared = nil;
     return item;
 }
 @end
+
 @implementation SliderView
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
-    
-    return [super hitTest:point withEvent:event];
-}
+//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+//
+//    return [super hitTest:point withEvent:event];
+//}
 
 @end

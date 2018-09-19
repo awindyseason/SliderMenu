@@ -36,12 +36,15 @@
 - (void)close{
     [[SliderMenu shared] close];
 }
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return _datas.count;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     SliderCell *cell = [_tv dequeueReusableCellWithIdentifier:@"slidercell"];
     cell.menuDelegate = self;
@@ -63,13 +66,11 @@
 
     return @[item1,item2];
     
-    
-    
 }
 
 /** 复用说明
- * menu如果都是统一样式，可设置复用Identifier 。当设置复用时，cell会一直使用第一次创建的menu
- * menu不是同一样式,不设置此方法、或者返回nil;
+ * 如果你的menu都是同一样式，可设置复用Identifier 。menu始终为同一对象。
+ * menu不是同一样式,不设置此方法、或者返回nil;menu会重新创建。
  */
 - (NSString *)sliderMenuReuseIdentifier{
     return @"EditWithDelete";
@@ -83,7 +84,6 @@
         // deleteRow貌似是让cell做了transform后hidden掉 并非真的delete
         [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
-    
     return false;
     
 }

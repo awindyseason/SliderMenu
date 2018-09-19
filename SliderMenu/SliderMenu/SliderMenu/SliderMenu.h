@@ -3,7 +3,7 @@
 #import <UIKit/UIKit.h>
 #import "SliderCell.h"
 
-// 当前menu状态
+
 typedef NS_ENUM(NSInteger,SliderMenuState) {
     SliderMenuClose, // 关闭
     SliderMenuSlider, // 滑动中
@@ -13,15 +13,20 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 
 @interface SliderMenu : NSObject
 
+// menu 状态
 @property (assign, nonatomic) SliderMenuState state;
+// lock 锁 , default is false . lock 为ture menu 不能滑动
 @property (assign, nonatomic) BOOL lock;
-@property (assign, nonatomic) CGFloat totalWidth;
-@property (strong, nonatomic) SliderView *view;
+// menu 的view
+@property (strong, nonatomic ,readonly) SliderView *view;
+// 当前menu所处的cell
 @property (weak, nonatomic) SliderCell *currentCell;
+// 当前偏移量
 @property (assign, nonatomic) CGFloat currentOffset;
+// menu 打开时的偏移量 ABS(maxOffset) == menu的宽度
+@property (assign, nonatomic ,readonly) CGFloat maxOffset;
 
 + (instancetype)shared;
-
 
 - (void)menuForCell:(SliderCell *)cell;
 - (void)transform:(CGFloat)x;
@@ -31,6 +36,7 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 
 @end
 
+// 配置按钮样式
 @interface MenuItem:NSObject
 
 @property (strong, nonatomic) NSString *title;

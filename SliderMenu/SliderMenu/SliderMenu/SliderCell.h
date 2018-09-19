@@ -40,6 +40,6 @@
 @property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
 
 
-- (void)openMenu:(BOOL)flag time:(NSTimeInterval)time;
+- (void)openMenu:(BOOL)open time:(NSTimeInterval)time;
 
 @end

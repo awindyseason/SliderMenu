@@ -19,6 +19,7 @@
     }
     return self;
 }
+
 - (void)awakeFromNib{
     [super awakeFromNib];
     [self prepare];
@@ -27,7 +28,6 @@
 - (void)prepare{
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     _menu = SliderMenu.shared;
-    
     _pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
     _pan.delegate = self;
     [self.contentView addGestureRecognizer:_pan];
@@ -44,14 +44,13 @@
     return true;
 }
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return  true;
+    return true;
 }
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
     if (gestureRecognizer == _pan) {
         
-        CGFloat offsety = [_pan translationInView:gestureRecognizer.view].y;
-        
-        if ( ABS(offsety) > 0) {
+        CGFloat panY = [_pan translationInView:gestureRecognizer.view].y;
+        if ( ABS(panY) > 0) {
             if (_menu.currentCell) {
                 [_menu.currentCell openMenu:false time:0.4];
             }
@@ -62,22 +61,28 @@
 }
 
 - (void)pan:(UIPanGestureRecognizer *)pan{
-
+    
     CGFloat panX = [pan translationInView:pan.view].x;
+    
+    if ( _menu.state == SliderMenuClose && panX > 0 ) {
+        [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
+        return;
+    }
+    
     CGFloat offsetX = panX + _menu.currentOffset;
     if ( offsetX > 0) {
         offsetX = 0;
     }
-    
-    if ( _menu.lock ) { // 关闭动画完成后才能进行下次打开
-        //  取消手势
+    if ( _menu.lock ) {
+        // 从一个cell到另一个cell 。menu锁住，等待关闭后才能打开
         //        _pan.enabled = false;
         //        _pan.enabled = true;
-        accumulation = -panX;
+        if (panX < 0){
+            accumulation = -panX;
+        }
         return;
     }else{
         offsetX = panX + _menu.currentOffset  + accumulation;
-        
         if (!_menu.view.superview) {
             [_menu menuForCell:self];
         }
@@ -96,16 +101,19 @@
         }
         
     }else if (pan.state == UIGestureRecognizerStateChanged){
-        
+        // 轻微右滑关闭  不想选择可以注释掉
         if (panX > 0 && [_menu.currentCell isEqual:self]) {
-            _menu.lock = true;
-            [_menu.currentCell openMenu:false time:0.3];
+            if (_menu.state != SliderMenuClose) {
+                _menu.lock = true;
+                [_menu.currentCell openMenu:false time:0.3];
+            }
             return;
         }
+        
         _menu.state = SliderMenuSlider;
         CGFloat tmpx = offsetX;
-        if (tmpx < _menu.totalWidth) {
-            tmpx =  _menu.totalWidth - (_menu.totalWidth - tmpx )* 0.2;
+        if (tmpx < _menu.maxOffset) {
+            tmpx =  _menu.maxOffset - (_menu.maxOffset - tmpx )* 0.2;
         }
         
         if (tmpx > 0 ) {
@@ -119,13 +127,13 @@
         CGPoint speed = [pan velocityInView:self];
         CGFloat time = 0.4;
         // time 根据滑动手势快慢 自适应改变
-        if (offsetX < 0.5 * _menu.totalWidth) {// 开
+        if (offsetX < 0.5 * _menu.maxOffset) {// 开
             
-            time = MIN(ABS((_menu.totalWidth - offsetX)*1.8/speed.x),time);
+            time = MIN(ABS((_menu.maxOffset - offsetX)*1.8/speed.x),time);
             [self openMenu:true time:time];
             
         }else{
-            
+
             time = MIN( ABS(offsetX*1.8/speed.x),time);
             [self openMenu:false time:time];
             
@@ -133,9 +141,9 @@
     }
 }
 
-- (void)openMenu:(BOOL)flag time:(NSTimeInterval)time{
+- (void)openMenu:(BOOL)open time:(NSTimeInterval)time{
     
-    _menu.currentOffset = flag ? _menu.totalWidth : 0;
+    _menu.currentOffset = open ? _menu.maxOffset : 0;
     _menu.state = SliderMenuSlider;
     
     [self.layer removeAllAnimations];
@@ -144,7 +152,7 @@
         [self move:self.menu.currentOffset];
         
     } completion:^(BOOL finished) {
-        if (flag) {
+        if (open) {
             self.menu.state = SliderMenuOpen;
         }else{
             self.menu.state = SliderMenuClose;
