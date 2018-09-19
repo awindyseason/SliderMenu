@@ -31,9 +31,9 @@
     _tv.tableFooterView = UIView.new;
     [self.view addSubview:_tv];
     [_tv registerClass:SliderCell.class forCellReuseIdentifier:@"slidercell"];
-    
 }
 - (void)close{
+    
     [[SliderMenu shared] close];
 }
 
