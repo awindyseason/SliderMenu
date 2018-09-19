@@ -46,6 +46,5 @@
  */
 - (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX;
 
-//- (void)openMenu:(BOOL)open time:(NSTimeInterval)time;
 
 @end

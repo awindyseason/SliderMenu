@@ -34,66 +34,39 @@
     _pan.delegate = self;
     [self.contentView addGestureRecognizer:_pan];
 }
-/* 点击关闭
- - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
- [super touchesBegan:touches withEvent:event];
- if ([SliderMenu shared].state == SliderMenuOpen) {
- [[SliderMenu shared] close];
- }
- }
- */
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return true;
-}
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return true;
-}
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
-    if (gestureRecognizer == _pan) {
-        
-        CGFloat panY = [_pan translationInView:gestureRecognizer.view].y;
-        if ( ABS(panY) > 0) {
-            if (_menu.currentCell) {
-                [_menu.currentCell openMenu:false time:0.4 springX:0];
-            }
-            return false;
-        }
-    }
-    return true;
-}
-
 - (void)pan:(UIPanGestureRecognizer *)pan{
-    
     if (_lastPanStateIsEnd && _menu.state == SliderMenuSlider && [_menu.currentCell isEqual:self]) {
         _cancelAnimationCompletion = true;
+        [pan setTranslation:CGPointMake(self.layer.presentationLayer.frame.origin.x, 0) inView:pan.view];
+        
+        
     }
     CGFloat panX = [pan translationInView:pan.view].x;
     if ( _menu.state == SliderMenuClose && panX >= 0 ) {
         [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
-        return;
     }
-    CGFloat offsetX = panX + _menu.currentOffset ;
     
-    if ( offsetX > 0) {
-        offsetX = 0;
-    }
+    CGFloat offsetX = panX + _menu.currentOffset ;
+
     if ( _menu.lock ) {
-        // 从一个cell到另一个cell 。menu锁住，等待关闭后才能打开
-        //        _pan.enabled = false;
-        //        _pan.enabled = true;
         if (panX < 0){
             accumulation = -panX;
         }
         return;
     }else{
-        offsetX = offsetX  + accumulation;
+        if ( offsetX > 0) {
+            offsetX = 0;
+        }
+        offsetX += accumulation;
+        
         if (!_menu.view.superview) {
             [_menu menuForCell:self];
         }
     }
    _lastPanStateIsEnd = false;
+    
     if (pan.state == UIGestureRecognizerStateBegan){
-//    _lastPanStateIsEnd = false;
+        
         if (_menu.currentCell  && ![_menu.currentCell isEqual:self] ) {
             _menu.lock = true;
             if (_menu.currentCell.hidden) {
@@ -102,7 +75,7 @@
                 if (panX > 0){
                     [_menu.currentCell openMenu:false time:0.35 springX:0];
                 }else{
-                    [_menu.currentCell openMenu:false time:0.2 springX:0];
+                    [_menu.currentCell openMenu:false time:0.15 springX:0];
                 }
             }
             return;
@@ -119,7 +92,6 @@
         }
         _menu.state = SliderMenuSlider;
         
-
         CGFloat tmpx = offsetX;
         if (tmpx < _menu.maxOffset) {
             tmpx =  _menu.maxOffset - (_menu.maxOffset - tmpx )* 0.25;
@@ -136,11 +108,11 @@
         _lastPanStateIsEnd = true;
         accumulation = 0;
         CGPoint speed = [pan velocityInView:self];
+        // time 根据滑动手势快慢 自适应改变 0.25 ~ 0.4之间
         CGFloat time = 0.4;
-        // time 根据滑动手势快慢 自适应改变
-        if (offsetX < 0.5 * _menu.maxOffset) {// 开
-            
-            time = MAX(MIN(ABS((_menu.maxOffset - offsetX)*1.8/speed.x),time),0.2);
+        if (offsetX < 0.3 * _menu.maxOffset || offsetX < -30) {// 开
+          
+            time = MAX(MIN(ABS((_menu.maxOffset - offsetX)*1.8/speed.x),time),0.25);
             if (offsetX < _menu.maxOffset){
                 [self openMenu:true time:time springX:3];
             }else{
@@ -149,7 +121,7 @@
             
         }else{
             
-            time = MAX(MIN( ABS(offsetX*1.8/speed.x),time),0.2);
+            time = MAX(MIN( ABS(offsetX*1.8/speed.x),time),0.25);
             [self openMenu:false time:time springX:3];
             
         }
@@ -157,14 +129,17 @@
 }
 
 - (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX{
-    _menu.currentOffset = open ? _menu.maxOffset : 0;
-    CGFloat moveX = _menu.currentOffset;
+  
+    CGFloat moveX = open ? _menu.maxOffset : 0;
     _menu.state = SliderMenuSlider;
     [self.layer removeAllAnimations];
     
-    [UIView animateWithDuration:time delay:0 options: UIViewAnimationOptionAllowUserInteraction |  UIViewAnimationOptionCurveEaseOut animations:^{
+    UIViewAnimationOptions options = UIViewAnimationOptionAllowUserInteraction |  UIViewAnimationOptionCurveEaseOut;
+    
+
+    [UIView animateWithDuration:time delay:0 options:options  animations:^{
         
-        [self move:moveX + 0];
+        [self move:moveX + springX];
         
     } completion:^(BOOL finished) {
         if (self.cancelAnimationCompletion){
@@ -173,40 +148,67 @@
         }
         if (finished) {
             
-            if (springX != 0) {
+            if (springX != 0 && !self.menu.lock) {
                 
-                [UIView animateWithDuration:0.3 delay:0 options:   UIViewAnimationOptionCurveEaseOut animations:^{
-                    [self move:self.menu.currentOffset];
+                [UIView animateWithDuration:0.3 delay:0 options:options animations:^{
+                    [self move:moveX];
                 } completion:nil];
                 
             }
             if (open) {
+               
                 self.menu.state = SliderMenuOpen;
+                 self.menu.currentOffset = self.menu.maxOffset;
             }else{
                 self.menu.state = SliderMenuClose;
+                 self.menu.currentOffset = 0;
                 self.menu.lock = false;
                 [self.menu reset];
             }
         }else{
-//            NSLog(@"fasle");
+            NSLog(@"false");
         }
     }];
-    
 }
-//- (void)openMenu:(BOOL)open time:(NSTimeInterval)time {
-//    [self openMenu:open time:time springX:0];
-//}
 
 - (void)move:(CGFloat)x{
     self.transform = CGAffineTransformMakeTranslation(x, 0);
     [_menu transform:x];
 }
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    if (gestureRecognizer == _pan) {
+        
+        CGFloat panY = [_pan translationInView:gestureRecognizer.view].y;
+        if ( ABS(panY) > 0) {
+            if (_menu.currentCell) {
+                [_menu.currentCell openMenu:false time:0.4 springX:0];
+            }
+            return false;
+        }
+    }
+    return true;
+}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return true;
+}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return true;
+}
+/* 点击关闭
+ - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+ [super touchesBegan:touches withEvent:event];
+ if ([SliderMenu shared].state == SliderMenuOpen) {
+ [[SliderMenu shared] close];
+ }
+ }
+ */
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
     
     CGPoint newP = [self convertPoint:point toView:_menu.view];
     if ( [_menu.view pointInside:newP withEvent:event])
     {
+        
         return [_menu.view hitTest:newP withEvent:event];
         
     }
