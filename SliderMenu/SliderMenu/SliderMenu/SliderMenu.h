@@ -17,6 +17,8 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 @property (assign, nonatomic) SliderMenuState state;
 // lock 锁 , default is false . lock 为ture menu 不能滑动
 @property (assign, nonatomic) BOOL lock;
+// turn
+@property (assign, nonatomic) BOOL turnLock;
 // menu 的view
 @property (strong, nonatomic ,readonly) SliderView *view;
 // 当前menu所处的cell

@@ -43,7 +43,8 @@
     }
     CGFloat panX = [pan translationInView:pan.view].x;
     if ( _menu.state == SliderMenuClose && panX >= 0 ) {
-        [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
+//        [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
+        return;
     }
     
     CGFloat offsetX = panX + _menu.currentOffset ;
@@ -63,12 +64,14 @@
             [_menu menuForCell:self];
         }
     }
+    
    _lastPanStateIsEnd = false;
     
     if (pan.state == UIGestureRecognizerStateBegan){
         
         if (_menu.currentCell  && ![_menu.currentCell isEqual:self] ) {
             _menu.lock = true;
+            _menu.turnLock = true;
             if (_menu.currentCell.hidden) {
                 [_menu.currentCell openMenu:false time:0 springX:0];
             }else{
@@ -84,7 +87,7 @@
     }else if (pan.state == UIGestureRecognizerStateChanged){
         // 轻微右滑关闭  不想选择可以注释掉
         if (panX > 0 && [_menu.currentCell isEqual:self]) {
-            if (_menu.state != SliderMenuClose) {
+            if (_menu.state == SliderMenuOpen) {
                 _menu.lock = true;
                 [_menu.currentCell openMenu:false time:0.35 springX:3];
             }
@@ -148,7 +151,7 @@
         }
         if (finished) {
             
-            if (springX != 0 && !self.menu.lock) {
+            if (springX != 0 && !self.menu.turnLock) {
                 
                 [UIView animateWithDuration:0.3 delay:0 options:options animations:^{
                     [self move:moveX];
@@ -163,10 +166,11 @@
                 self.menu.state = SliderMenuClose;
                  self.menu.currentOffset = 0;
                 self.menu.lock = false;
+                self.menu.turnLock = false;
                 [self.menu reset];
             }
         }else{
-            NSLog(@"false");
+//            NSLog(@"false");
         }
     }];
 }

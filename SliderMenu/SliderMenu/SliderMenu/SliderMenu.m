@@ -45,7 +45,8 @@ static SliderMenu *shared = nil;
         _currentCell = nil;
         _currentOffset = 0;
         _menuItems = nil;
-        
+        _lock = false;
+        _turnLock = false;
     }
 }
 - (void)releaseView{
