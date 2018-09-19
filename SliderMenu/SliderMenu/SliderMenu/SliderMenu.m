@@ -25,7 +25,7 @@ static SliderMenu *shared = nil;
 }
 
 - (void)transform:(CGFloat)x{
-  
+    
     CGFloat offsetx = x;
     CGFloat offsetWidth = 0.0;
     
@@ -55,7 +55,7 @@ static SliderMenu *shared = nil;
     _reuseIdent = nil;
 }
 - (void)close{
-    [self.currentCell openMenu:false time:0.25];
+    [self.currentCell openMenu:false time:0.3 springX:3];
 }
 
 - (void)menuForCell:(SliderCell*)cell{
@@ -108,6 +108,7 @@ static SliderMenu *shared = nil;
         }
         
         _maxOffset = -_maxOffset;
+        
         _view.frame = CGRectMake(CGRectGetMaxX(cell.frame), 0, ABS(self.maxOffset), _currentCell.frame.size.height);
     }
     

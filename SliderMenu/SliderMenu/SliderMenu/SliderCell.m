@@ -52,7 +52,7 @@
         CGFloat panY = [_pan translationInView:gestureRecognizer.view].y;
         if ( ABS(panY) > 0) {
             if (_menu.currentCell) {
-                [_menu.currentCell openMenu:false time:0.4];
+                [_menu.currentCell openMenu:false time:0.4 springX:0];
             }
             return false;
         }
@@ -64,7 +64,8 @@
     
     CGFloat panX = [pan translationInView:pan.view].x;
     
-    if ( _menu.state == SliderMenuClose && panX > 0 ) {
+
+    if ( _menu.state == SliderMenuClose && panX >= 0 ) {
         [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
         return;
     }
@@ -93,9 +94,13 @@
         if (_menu.currentCell  && ![_menu.currentCell isEqual:self] ) {
             _menu.lock = true;
             if (_menu.currentCell.hidden) {
-                [_menu.currentCell openMenu:false time:0];
+                [_menu.currentCell openMenu:false time:0 springX:0];
             }else{
-                [_menu.currentCell openMenu:false time:0.4];
+                if (panX > 0){
+                [_menu.currentCell openMenu:false time:0.35 springX:0];
+                    }else{
+                   [_menu.currentCell openMenu:false time:0.2 springX:0];
+                    }
             }
             return;
         }
@@ -105,7 +110,7 @@
         if (panX > 0 && [_menu.currentCell isEqual:self]) {
             if (_menu.state != SliderMenuClose) {
                 _menu.lock = true;
-                [_menu.currentCell openMenu:false time:0.3];
+                [_menu.currentCell openMenu:false time:0.35 springX:3];
             }
             return;
         }
@@ -113,12 +118,13 @@
         _menu.state = SliderMenuSlider;
         CGFloat tmpx = offsetX;
         if (tmpx < _menu.maxOffset) {
-            tmpx =  _menu.maxOffset - (_menu.maxOffset - tmpx )* 0.2;
+            tmpx =  _menu.maxOffset - (_menu.maxOffset - tmpx )* 0.25;
         }
         
         if (tmpx > 0 ) {
             tmpx = 0;
         }
+        
         [self move:tmpx];
         
     }
@@ -129,38 +135,56 @@
         // time 根据滑动手势快慢 自适应改变
         if (offsetX < 0.5 * _menu.maxOffset) {// 开
             
-            time = MIN(ABS((_menu.maxOffset - offsetX)*1.8/speed.x),time);
-            [self openMenu:true time:time];
+            time = MAX(MIN(ABS((_menu.maxOffset - offsetX)*1.8/speed.x),time),0.2);
+              if (offsetX < _menu.maxOffset){
+            [self openMenu:true time:time springX:3];
+                  }else{
+                      [self openMenu:true time:time springX:-10];
+                  }
             
         }else{
 
-            time = MIN( ABS(offsetX*1.8/speed.x),time);
-            [self openMenu:false time:time];
+            time = MAX(MIN( ABS(offsetX*1.8/speed.x),time),0.2);
+            [self openMenu:false time:time springX:3];
             
         }
     }
 }
 
-- (void)openMenu:(BOOL)open time:(NSTimeInterval)time{
-    
+- (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX{
     _menu.currentOffset = open ? _menu.maxOffset : 0;
+    CGFloat moveX = _menu.currentOffset;
     _menu.state = SliderMenuSlider;
     
     [self.layer removeAllAnimations];
-    
     [UIView animateWithDuration:time delay:0 options: UIViewAnimationOptionAllowUserInteraction |  UIViewAnimationOptionCurveEaseOut animations:^{
-        [self move:self.menu.currentOffset];
+        
+        [self move:moveX+springX];
+        
+       
         
     } completion:^(BOOL finished) {
+        if (springX != 0) {
+
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction |  UIViewAnimationOptionCurveEaseOut animations:^{
+                 [self move:self.menu.currentOffset];
+            } completion:nil];
+            
+        }
         if (open) {
             self.menu.state = SliderMenuOpen;
+            
         }else{
             self.menu.state = SliderMenuClose;
             self.menu.lock = false;
             [self.menu reset];
         }
     }];
+
 }
+//- (void)openMenu:(BOOL)open time:(NSTimeInterval)time {
+//    [self openMenu:open time:time springX:0];
+//}
 
 - (void)move:(CGFloat)x{
     self.transform = CGAffineTransformMakeTranslation(x, 0);

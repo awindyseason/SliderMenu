@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 @property (strong, nonatomic ,readonly) SliderView *view;
 // 当前menu所处的cell
 @property (weak, nonatomic) SliderCell *currentCell;
-// 当前偏移量
+// 前状态的偏移量 
 @property (assign, nonatomic) CGFloat currentOffset;
 // menu 打开时的偏移量 ABS(maxOffset) == menu的宽度
 @property (assign, nonatomic ,readonly) CGFloat maxOffset;

@@ -61,7 +61,7 @@
     /*
      可设置item属性：title bgcolor font width titleColor
      */
-    MenuItem *item1 = [MenuItem title:@"编辑" bgcolor:UIColor.brownColor];
+    MenuItem *item1 = [MenuItem title:@"编辑" bgcolor:UIColor.blueColor];
     MenuItem *item2 = [MenuItem title:@"删除" bgcolor:UIColor.redColor];
 
     return @[item1,item2];

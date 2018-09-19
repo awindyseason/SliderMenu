@@ -39,7 +39,13 @@
 
 @property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
 
+/**
+ * @param open 打开 / 关闭
+ * @param time 时间
+ * @param springX 正数：右摇动； 负数：左摇动 ； 0：不spring 。数值代表幅度
+ */
+- (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX;
 
-- (void)openMenu:(BOOL)open time:(NSTimeInterval)time;
+//- (void)openMenu:(BOOL)open time:(NSTimeInterval)time;
 
 @end
