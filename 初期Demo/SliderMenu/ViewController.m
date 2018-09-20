@@ -69,6 +69,13 @@
     
 }
 
+/** 复用说明
+ * 如果你的menu都是同一样式，可设置复用Identifier 。menu始终为同一对象。
+ * menu不是同一样式,不设置此方法、或者返回nil;menu会重新创建。
+ */
+- (NSString *)sliderMenuReuseIdentifier{
+    return @"EditWithDelete";
+}
 
 // return ture == 自动关闭 == [[SliderMenu shared] close];
 - (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{

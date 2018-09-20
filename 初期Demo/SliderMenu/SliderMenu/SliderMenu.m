@@ -4,22 +4,21 @@
 
 static SliderMenu *shared = nil;
 @interface SliderMenu()
-@property (assign, nonatomic) NSInteger count;
 
+@property (assign, nonatomic) NSInteger count;
+@property (strong, nonatomic) NSString *reuseIdent;
 @end
 @implementation SliderMenu
-
 + (instancetype)shared{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         shared = [SliderMenu new];
-        
     });
     return shared;
 }
-
 - (instancetype)init{
     if (self = [super init]) {
+        
         _state = SliderMenuClose;
     }
     return self;
@@ -41,29 +40,52 @@ static SliderMenu *shared = nil;
 - (void)removeAnimations{
     [_view.layer removeAllAnimations];
     for (UIView *v in _view.subviews) {
+        for (UIView *v2 in v.subviews){
+            [v2.layer removeAllAnimations];
+        }
         [v.layer removeAllAnimations];
     }
 }
-
+- (void)reset{
+    if (_view.superview){
+        _currentCell.contentView.transform = CGAffineTransformIdentity;
+        [_view removeFromSuperview];
+        
+        _currentCell = nil;
+        _currentOffset = 0;
+        
+        _lock = false;
+    }
+}
+- (void)releaseView{
+    [self reset];
+    _view = nil;
+    _maxOffset = 0;
+    _reuseIdent = nil;
+}
 - (void)close{
     [self.currentCell openMenu:false time:0.3 springX:3];
 }
 
 - (void)menuForCell:(SliderCell*)cell{
     _currentCell = cell;
-    SliderMenu.shared.currentCell = _currentCell;
-    UITableView *tv = (UITableView *)cell.superview;
-    NSIndexPath *indexPath = [tv indexPathForCell:cell];
-    
-    if(!_view  ){
+    NSString *reuseIdent = nil;
+    if ([_currentCell.menuDelegate respondsToSelector:@selector(sliderMenuReuseIdentifier)]) {
+        reuseIdent = [_currentCell.menuDelegate sliderMenuReuseIdentifier];
+    }
+    if(!_view || ![_reuseIdent isEqualToString:reuseIdent] ){
+        UITableView *tv = (UITableView *)cell.superview;
+        NSIndexPath *indexPath = [tv indexPathForCell:cell];
         NSArray *menuItems  = [_currentCell.menuDelegate sliderMenuItemsForIndexPath:indexPath];
-        _count = menuItems.count;
+        _reuseIdent = reuseIdent;
         _view = [SliderView new];
+        
         _maxOffset = 0.0;
         for (int i = 0; i < menuItems.count; i++) {
+            _count = menuItems.count;
             MenuItem *item = [menuItems objectAtIndex:i];
             if (!item.width) {
-                item.width = item.width?:[item.title sizeWithAttributes:@{NSFontAttributeName:item.font}].width + 36;
+                item.width = item.width?:[item.title sizeWithAttributes:@{NSFontAttributeName:item.font}].width + 46;
             }
             
             CGFloat width = item.width;
@@ -91,9 +113,11 @@ static SliderMenu *shared = nil;
             }else{
                 [_view sendSubviewToBack:bgview];
             }
+            
         }
         
         _maxOffset = -_maxOffset;
+        
         _view.frame = CGRectMake(CGRectGetMaxX(cell.frame), 0, ABS(self.maxOffset), _currentCell.frame.size.height);
     }
     
@@ -104,6 +128,7 @@ static SliderMenu *shared = nil;
     if ([_currentCell.menuDelegate respondsToSelector:@selector(sliderMenuDidSelectIndex:atIndexPath:)]) {
         UITableView *tv = (UITableView *)_currentCell.superview;
         NSIndexPath *indexPath = [tv indexPathForCell:_currentCell];
+ 
         if ([_currentCell.menuDelegate sliderMenuDidSelectIndex:btn.tag - 100 atIndexPath:indexPath]){
             [self close];
         }

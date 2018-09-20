@@ -13,8 +13,8 @@
 		F849C989214A62BC00030C85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F849C988214A62BC00030C85 /* Assets.xcassets */; };
 		F849C98C214A62BC00030C85 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F849C98A214A62BC00030C85 /* LaunchScreen.storyboard */; };
 		F849C98F214A62BC00030C85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F849C98E214A62BC00030C85 /* main.m */; };
-		F84B56A52153926D008879B2 /* SliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F84B56A22153926D008879B2 /* SliderCell.m */; };
-		F84B56A62153926D008879B2 /* SliderMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = F84B56A42153926D008879B2 /* SliderMenu.m */; };
+		F849C999214A62F100030C85 /* SliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F849C996214A62F000030C85 /* SliderCell.m */; };
+		F849C99A214A62F100030C85 /* SliderMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = F849C998214A62F100030C85 /* SliderMenu.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,10 +28,10 @@
 		F849C98B214A62BC00030C85 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F849C98D214A62BC00030C85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F849C98E214A62BC00030C85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F84B56A12153926D008879B2 /* SliderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderCell.h; sourceTree = "<group>"; };
-		F84B56A22153926D008879B2 /* SliderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderCell.m; sourceTree = "<group>"; };
-		F84B56A32153926D008879B2 /* SliderMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderMenu.h; sourceTree = "<group>"; };
-		F84B56A42153926D008879B2 /* SliderMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderMenu.m; sourceTree = "<group>"; };
+		F849C995214A62F000030C85 /* SliderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderCell.h; sourceTree = "<group>"; };
+		F849C996214A62F000030C85 /* SliderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderCell.m; sourceTree = "<group>"; };
+		F849C997214A62F100030C85 /* SliderMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderMenu.h; sourceTree = "<group>"; };
+		F849C998214A62F100030C85 /* SliderMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderMenu.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,10 +48,10 @@
 		F84778AB214B5DF80065022C /* SliderMenu */ = {
 			isa = PBXGroup;
 			children = (
-				F84B56A12153926D008879B2 /* SliderCell.h */,
-				F84B56A22153926D008879B2 /* SliderCell.m */,
-				F84B56A32153926D008879B2 /* SliderMenu.h */,
-				F84B56A42153926D008879B2 /* SliderMenu.m */,
+				F849C995214A62F000030C85 /* SliderCell.h */,
+				F849C996214A62F000030C85 /* SliderCell.m */,
+				F849C997214A62F100030C85 /* SliderMenu.h */,
+				F849C998214A62F100030C85 /* SliderMenu.m */,
 			);
 			path = SliderMenu;
 			sourceTree = "<group>";
@@ -161,8 +161,8 @@
 			files = (
 				F849C984214A62B800030C85 /* ViewController.m in Sources */,
 				F849C98F214A62BC00030C85 /* main.m in Sources */,
-				F84B56A52153926D008879B2 /* SliderCell.m in Sources */,
-				F84B56A62153926D008879B2 /* SliderMenu.m in Sources */,
+				F849C999214A62F100030C85 /* SliderCell.m in Sources */,
+				F849C99A214A62F100030C85 /* SliderMenu.m in Sources */,
 				F849C981214A62B800030C85 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

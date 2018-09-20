@@ -20,6 +20,14 @@
 @optional
 
 /**
+ *  复用说明
+ * menu如果都是统一样式，可设置复用Identifier 。当设置复用时，cell会一直使用第一次创建的menu
+ * menu不是同一样式,不设置此方法、或者返回nil;
+ * @return 复用identify
+ */
+- (NSString *)sliderMenuReuseIdentifier;
+
+/**
  * @return 点击后是否自动关闭 ture：关闭 
  */
 - (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath;

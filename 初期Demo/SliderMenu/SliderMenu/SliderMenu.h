@@ -15,11 +15,13 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 
 // menu 状态
 @property (assign, nonatomic) SliderMenuState state;
+// lock 锁 , default is false . lock 为ture 阻止手势
+@property (assign, nonatomic) BOOL lock;
 // menu 的view
 @property (strong, nonatomic ,readonly) SliderView *view;
-// menu所处的cell
+// 当前menu所处的cell
 @property (weak, nonatomic) SliderCell *currentCell;
-// 偏移量
+// 前状态的偏移量 
 @property (assign, nonatomic) CGFloat currentOffset;
 // menu 打开时的偏移量 ABS(maxOffset) == menu的宽度
 @property (assign, nonatomic ,readonly) CGFloat maxOffset;
@@ -29,6 +31,8 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 - (void)menuForCell:(SliderCell *)cell;
 - (void)transform:(CGFloat)x;
 - (void)close;
+- (void)reset;
+- (void)releaseView;
 - (void)removeAnimations;
 @end
 
@@ -43,7 +47,6 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 @property (strong, nonatomic) UIFont *font;
 
 + (instancetype)title:(NSString *)title bgcolor:(UIColor *)bgcolor;
-
 @end
 
 @interface SliderView:UIView
