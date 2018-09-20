@@ -7,7 +7,7 @@
 * 推荐主demo。不复用，但不同cell上的menu切换效果更好。
 
 ```objective-C
-设置tableviewcell的代理
+设置SliderCell的代理
 cell.menuDelegate = self;
 // 设置按钮样式
 - (NSArray<MenuItem *> *)sliderMenuItemsForIndexPath:(NSIndexPath *)indexPath{
