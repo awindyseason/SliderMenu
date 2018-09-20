@@ -52,7 +52,6 @@
     
     cell.textLabel.text = [_datas objectAtIndex:indexPath.row];
 
-    
     return cell;
     
 }

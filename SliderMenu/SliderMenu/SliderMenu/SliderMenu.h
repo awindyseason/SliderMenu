@@ -15,10 +15,8 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 
 // menu 状态
 @property (assign, nonatomic) SliderMenuState state;
-// lock 锁 , default is false . lock 为ture menu 不能滑动
+// lock 锁 , default is false . lock 为ture 阻止手势
 @property (assign, nonatomic) BOOL lock;
-// turn
-@property (assign, nonatomic) BOOL turnLock;
 // menu 的view
 @property (strong, nonatomic ,readonly) SliderView *view;
 // 当前menu所处的cell
@@ -35,7 +33,7 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 - (void)close;
 - (void)reset;
 - (void)releaseView;
-
+- (void)removeAnimations;
 @end
 
 // 配置按钮样式

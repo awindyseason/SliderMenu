@@ -37,18 +37,25 @@
 - (void)pan:(UIPanGestureRecognizer *)pan{
     if (_lastPanStateIsEnd && _menu.state == SliderMenuSlider && [_menu.currentCell isEqual:self]) {
         _cancelAnimationCompletion = true;
-        [pan setTranslation:CGPointMake(self.layer.presentationLayer.frame.origin.x, 0) inView:pan.view];
         
+        [pan setTranslation:CGPointMake(self.layer.presentationLayer.frame.origin.x, 0) inView:pan.view];
+    _menu.currentOffset = 0;
+        [self move:self.layer.presentationLayer.frame.origin.x];
+        
+        
+        [self.layer removeAllAnimations];
+        [self.menu removeAnimations];
         
     }
+    
     CGFloat panX = [pan translationInView:pan.view].x;
     if ( _menu.state == SliderMenuClose && panX >= 0 ) {
-//        [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
+        //        [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
         return;
     }
     
     CGFloat offsetX = panX + _menu.currentOffset ;
-
+    
     if ( _menu.lock ) {
         if (panX < 0){
             accumulation = -panX;
@@ -65,13 +72,12 @@
         }
     }
     
-   _lastPanStateIsEnd = false;
+    _lastPanStateIsEnd = false;
     
     if (pan.state == UIGestureRecognizerStateBegan){
         
         if (_menu.currentCell  && ![_menu.currentCell isEqual:self] ) {
             _menu.lock = true;
-            _menu.turnLock = true;
             if (_menu.currentCell.hidden) {
                 [_menu.currentCell openMenu:false time:0 springX:0];
             }else{
@@ -85,14 +91,16 @@
         }
         
     }else if (pan.state == UIGestureRecognizerStateChanged){
-        // 轻微右滑关闭  不想选择可以注释掉
+
         if (panX > 0 && [_menu.currentCell isEqual:self]) {
             if (_menu.state == SliderMenuOpen) {
-                _menu.lock = true;
+                _pan.enabled = false;
+                _pan.enabled = true;
                 [_menu.currentCell openMenu:false time:0.35 springX:3];
             }
             return;
         }
+        
         _menu.state = SliderMenuSlider;
         
         CGFloat tmpx = offsetX;
@@ -114,7 +122,7 @@
         // time 根据滑动手势快慢 自适应改变 0.25 ~ 0.4之间
         CGFloat time = 0.4;
         if (offsetX < 0.3 * _menu.maxOffset || offsetX < -30) {// 开
-          
+            
             time = MAX(MIN(ABS((_menu.maxOffset - offsetX)*1.8/speed.x),time),0.25);
             if (offsetX < _menu.maxOffset){
                 [self openMenu:true time:time springX:3];
@@ -132,26 +140,29 @@
 }
 
 - (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX{
-  
+    
     CGFloat moveX = open ? _menu.maxOffset : 0;
+    CGFloat alpha = open ? 1 : 0.5;
     _menu.state = SliderMenuSlider;
     [self.layer removeAllAnimations];
+    [self.menu removeAnimations];
+    UIViewAnimationOptions options = UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionOverrideInheritedDuration |  UIViewAnimationOptionCurveEaseOut;
     
-    UIViewAnimationOptions options = UIViewAnimationOptionAllowUserInteraction |  UIViewAnimationOptionCurveEaseOut;
     
-
     [UIView animateWithDuration:time delay:0 options:options  animations:^{
-        
+        self.menu.view.alpha = alpha;
         [self move:moveX + springX];
         
     } completion:^(BOOL finished) {
+         self.menu.view.alpha = 1;
         if (self.cancelAnimationCompletion){
+            [self.menu removeAnimations];
             self.cancelAnimationCompletion = false;
             return ;
         }
         if (finished) {
             
-            if (springX != 0 && !self.menu.turnLock) {
+            if (springX != 0 && !self.menu.lock) {
                 
                 [UIView animateWithDuration:0.3 delay:0 options:options animations:^{
                     [self move:moveX];
@@ -159,18 +170,18 @@
                 
             }
             if (open) {
-               
+                
                 self.menu.state = SliderMenuOpen;
-                 self.menu.currentOffset = self.menu.maxOffset;
+                self.menu.currentOffset = self.menu.maxOffset;
             }else{
                 self.menu.state = SliderMenuClose;
-                 self.menu.currentOffset = 0;
+                self.menu.currentOffset = 0;
                 self.menu.lock = false;
-                self.menu.turnLock = false;
+                self.menu.lock = false;
                 [self.menu reset];
             }
         }else{
-//            NSLog(@"false");
+            //            NSLog(@"false");
         }
     }];
 }

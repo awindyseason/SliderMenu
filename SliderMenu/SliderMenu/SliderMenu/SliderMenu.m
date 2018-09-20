@@ -37,6 +37,15 @@ static SliderMenu *shared = nil;
         v.transform = CGAffineTransformMakeTranslation(voffsetx, 0);
     }
 }
+- (void)removeAnimations{
+    [_view.layer removeAllAnimations];
+    for (UIView *v in _view.subviews) {
+        for (UIView *v2 in v.subviews){
+            [v2.layer removeAllAnimations];
+        }
+        [v.layer removeAllAnimations];
+    }
+}
 - (void)reset{
     if (_view.superview){
         _currentCell.contentView.transform = CGAffineTransformIdentity;
@@ -46,7 +55,6 @@ static SliderMenu *shared = nil;
         _currentOffset = 0;
         _menuItems = nil;
         _lock = false;
-        _turnLock = false;
     }
 }
 - (void)releaseView{
