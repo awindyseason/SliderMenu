@@ -5,9 +5,7 @@
 
      ![= =](https://upload-images.jianshu.io/upload_images/6657057-8cb25fcda8066aee.gif?imageMogr2/auto-orient/strip)
 
-* 文件里有两个demo
-* 一个是初期的，单个cell 可复用。过渡效果一般。
-* 推荐主demo。不复用，但不同cell上的menu切换效果更好。
+
 
 ```objective-C
 设置SliderCell的代理
