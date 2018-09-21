@@ -32,6 +32,9 @@
     [self.contentView addGestureRecognizer:_pan];
 }
 - (void)pan:(UIPanGestureRecognizer *)pan{
+    if (!self.menuDelegate) {
+        return;
+    }
     if (_lastPanStateIsEnd && _menu.state == SliderMenuSlider && [SliderMenu.shared.currentCell isEqual:self]) {
         _cancelAnimationCompletion = true;
         self.menu.currentOffset = 0; //useful
@@ -198,7 +201,10 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return true;
 }
-
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [super touchesBegan:touches withEvent:event];
+    _lastPanStateIsEnd = false;
+}
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
     
     CGPoint newP = [self convertPoint:point toView:_menu.view];
