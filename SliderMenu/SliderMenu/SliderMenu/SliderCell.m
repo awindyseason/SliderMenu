@@ -110,7 +110,7 @@
         // time 根据滑动手势快慢 自适应改变 0.25 ~ 0.4之间
         CGFloat time = 0.4;
         // 判断滑动幅度决定开或关 可自行调整
-        if (offsetX < 0.3 * _menu.maxOffset || offsetX < -40) {// 开
+        if (offsetX < 0.3 * _menu.maxOffset || offsetX < -30) {// 开
             
             time = MAX(MIN(ABS((_menu.maxOffset - offsetX)*1.8/speed.x),time),0.25);
             if (offsetX < _menu.maxOffset){
@@ -132,6 +132,7 @@
     
     CGFloat moveX = open ? _menu.maxOffset : 0;
     CGFloat alpha = open ? 1 : 0.5;
+    
     _menu.state = SliderMenuSlider;
     [self.layer removeAllAnimations];
     [self.menu removeAnimations];

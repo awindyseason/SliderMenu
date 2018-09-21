@@ -4,7 +4,7 @@
 //
 //  Created by 雎琳 on 2018/9/13.
 //  Copyright © 2018年 雎琳. All rights reserved.
-//
+
 
 #import "ViewController.h"
 
@@ -21,22 +21,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationItem.title = @"SliderMenu";
-    UIBarButtonItem *barItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
-    self.navigationItem.rightBarButtonItem = barItem;
+    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    self.navigationItem.rightBarButtonItem = rightBarItem;
    
     _datas = @[@"0",@"1",@"2",@"3",@"4"].mutableCopy;
     _tv = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _tv.dataSource = self;
-    _tv.rowHeight = 50;
+    _tv.rowHeight = 55;
     _tv.tableFooterView = UIView.new;
     [self.view addSubview:_tv];
     [_tv registerClass:SliderCell.class forCellReuseIdentifier:@"slidercell"];
 
 }
 - (void)close{
-    
     [[SliderMenu shared] close];
+}
+
+- (void)open:(SliderCell *)cell{
+    [[SliderMenu shared] close];
+     [cell openMenu:true time:0.3 springX:0];
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
