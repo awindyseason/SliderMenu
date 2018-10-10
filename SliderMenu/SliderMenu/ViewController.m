@@ -40,19 +40,13 @@
     [[SliderMenu shared].currentCell close];
 }
 
-- (void)open:(SliderCell *)cell{
-    [[SliderMenu shared].currentCell close];
-     [cell openMenu:true time:0.3 springX:0];
-    
-}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    // tableview 滚动 ，cell出屏幕 会复用 ，menu应关闭
     if ([SliderMenu shared].currentCell.state == SliderMenuOpen) {
-           [[SliderMenu shared].currentCell close];
+        [[SliderMenu shared].currentCell close];
     }
-   
- 
- 
 }
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
