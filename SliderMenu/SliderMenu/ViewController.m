@@ -30,21 +30,29 @@
     _tv = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _tv.dataSource = self;
     _tv.rowHeight = 55;
+    _tv.delegate = self;
     _tv.tableFooterView = UIView.new;
     [self.view addSubview:_tv];
     [_tv registerClass:SliderCell.class forCellReuseIdentifier:@"slidercell"];
-
+    
 }
 - (void)close{
-    [[SliderMenu shared] close];
+    [[SliderMenu shared].currentCell close];
 }
 
 - (void)open:(SliderCell *)cell{
-    [[SliderMenu shared] close];
+    [[SliderMenu shared].currentCell close];
      [cell openMenu:true time:0.3 springX:0];
     
 }
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if ([SliderMenu shared].currentCell.state == SliderMenuOpen) {
+           [[SliderMenu shared].currentCell close];
+    }
+   
+ 
+ 
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }

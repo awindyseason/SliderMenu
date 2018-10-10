@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger,SliderMenuState) {
+    SliderMenuClose, // 关闭
+    SliderMenuSlider, // 滑动中
+    SliderMenuOpen // 打开
+};
 @class MenuItem;
 
 @protocol SliderMenuDelegate
@@ -28,7 +33,7 @@
 @end
 
 @interface SliderCell : UITableViewCell
-
+@property (assign, nonatomic) SliderMenuState state;
 @property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
 
 /**
@@ -37,6 +42,6 @@
  * @param springX 正数：右摇动； 负数：左摇动 ； 0：不spring 。数值代表幅度
  */
 - (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX;
-
+- (void)close;
 
 @end
