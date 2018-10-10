@@ -1,8 +1,8 @@
 # SliderMenu 
 
 * TableView 上cell的侧滑菜单，
-\n.支持自定义按钮，及不同样式
-\n.流畅的过度效果及小动画。
+.支持自定义按钮，及不同样式
+.流畅的过度效果及小动画。
 
 
      ![= =](https://upload-images.jianshu.io/upload_images/6657057-8cb25fcda8066aee.gif?imageMogr2/auto-orient/strip)
