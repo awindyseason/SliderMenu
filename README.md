@@ -6,8 +6,6 @@ tableview cell 的左滑菜单、侧滑菜单
 ~优化手势动画的体验，有流畅的过度效果和小动画
 
 
-     ![= =](https://upload-images.jianshu.io/upload_images/6657057-8cb25fcda8066aee.gif?imageMogr2/auto-orient/strip)
-
 
 
 ```objective-C
