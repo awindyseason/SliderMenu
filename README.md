@@ -1,6 +1,6 @@
 # SliderMenu 
 
-tableview cell 的左滑菜单、侧滑菜单
+##tableview cell 的左滑菜单、侧滑菜单
 ~使用非常简单
 ~支持自定义按钮
 ~优化手势动画的体验，有流畅的过度效果和小动画
