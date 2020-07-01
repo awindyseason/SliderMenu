@@ -9,6 +9,7 @@
 
 
 ```objective-C
+UITableView 把cell继承于SliderCell  . UICollectionView 修改下 SliderCell 为 CollectViewCell
 设置SliderCell的代理
 cell.menuDelegate = self;
 // 设置按钮样式
