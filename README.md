@@ -10,10 +10,10 @@
 
 ```objective-C
 === How To Use === 
-    1，继承 YourCell : SliderCell  
-     UICollectionView 需要 修改下SliderCell : CollectViewCell
-    2，设置SliderCell的代理
-      cell.menuDelegate = self;
+ 1，继承 YourCell : SliderCell  
+ UICollectionView 需要 修改下SliderCell : CollectViewCell
+ 2，设置SliderCell的代理
+ cell.menuDelegate = self;
 // 设置按钮样式
 - (NSArray<MenuItem *> *)sliderMenuItemsForIndexPath:(NSIndexPath *)indexPath{
     /*
