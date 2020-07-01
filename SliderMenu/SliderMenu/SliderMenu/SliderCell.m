@@ -28,6 +28,7 @@
 }
 
 - (void)prepare{
+    self.clipsToBounds = false;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     _pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
     _pan.delegate = self;
