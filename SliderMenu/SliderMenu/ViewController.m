@@ -41,7 +41,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    // tableview 滚动 ，cell出屏幕 会复用 ，menu应关闭
+    // tableview滚动 ，menu关闭
     if ([SliderMenu shared].currentCell.state == SliderMenuOpen) {
         [[SliderMenu shared].currentCell close];
     }
@@ -78,12 +78,11 @@
 }
 
 
-// return ture == 自动关闭 == [[SliderMenu shared] close];
+// return ture : 点击后自动关闭  
 - (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"didSelectIndex:%ld row:%ld",index,indexPath.row);
     if (index == 1){
         [_datas removeObjectAtIndex:indexPath.row];
-        // deleteRow貌似是让cell做了transform后hidden掉 并非真的delete
         [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
     return false;

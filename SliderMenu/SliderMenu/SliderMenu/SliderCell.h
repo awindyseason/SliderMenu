@@ -6,6 +6,7 @@
 //  Copyright © 2018年 雎琳. All rights reserved.
 //
 
+
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger,SliderMenuState) {
@@ -14,7 +15,7 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
     SliderMenuOpen // 打开
 };
 @class MenuItem;
-
+@class SliderCell;
 @protocol SliderMenuDelegate
 
 /**
@@ -32,7 +33,13 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 
 @end
 
+/*
+ * 继承于即可 => YourCell : SliderCell
+ * 可适用于UICollectionViewCell => @interface SliderCell : UICollectionViewCell
+*/
+
 @interface SliderCell : UITableViewCell
+
 @property (assign, nonatomic) SliderMenuState state;
 @property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
 
