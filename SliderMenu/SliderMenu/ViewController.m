@@ -25,8 +25,10 @@
     self.navigationItem.title = @"SliderMenu";
     UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     self.navigationItem.rightBarButtonItem = rightBarItem;
-   
-    _datas = @[@"0",@"1",@"2",@"3",@"4"].mutableCopy;
+    _datas = @[].mutableCopy;
+    for (int i = 0; i < 5 ; i++) {
+        [_datas addObject:@(i).stringValue];
+    }
     _tv = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _tv.dataSource = self;
     _tv.rowHeight = 55;
@@ -60,7 +62,7 @@
     cell.menuDelegate = self;
     
     cell.textLabel.text = [_datas objectAtIndex:indexPath.row];
-
+    
     return cell;
     
 }
@@ -68,22 +70,34 @@
 // === SliderDelegate ===
 - (NSArray<MenuItem *> *)sliderMenuItemsForIndexPath:(NSIndexPath *)indexPath{
     /*
-     可设置item属性：title bgcolor font width titleColor
+     可设置item属性：title bgcolor font width titleColor 修改源码可自行添加
      */
-    MenuItem *item1 = [MenuItem title:@"编辑" bgcolor:UIColor.blueColor];
-    MenuItem *item2 = [MenuItem title:@"删除" bgcolor:UIColor.redColor];
-
-    return @[item1,item2];
+    if (indexPath.row % 2 ==0) {
+        MenuItem *item1 = [MenuItem title:@"编辑" bgcolor:UIColor.blueColor];
+        MenuItem *item2 = [MenuItem title:@"删除" bgcolor:UIColor.redColor];
+        
+        return @[item1,item2];
+    }else{
+        MenuItem *item1 = [MenuItem title:@"点击关闭" bgcolor:UIColor.orangeColor];
+        item1.font = [UIFont systemFontOfSize:15];
+        item1.width = 120;
+        item1.titleColor = UIColor.blackColor;
+        return @[item1];
+    }
     
 }
 
-
-// return ture : 点击后自动关闭  
+  
 - (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"didSelectIndex:%ld row:%ld",index,indexPath.row);
-    if (index == 1){
-        [_datas removeObjectAtIndex:indexPath.row];
-        [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    if (indexPath.row % 2 ==0) {
+        if (index == 1){
+            [_datas removeObjectAtIndex:indexPath.row];
+            [_tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }else{
+        // 点击后自动关闭
+        return true;
     }
     return false;
     

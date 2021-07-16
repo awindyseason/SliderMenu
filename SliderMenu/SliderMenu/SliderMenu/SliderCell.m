@@ -6,11 +6,11 @@
 
 @property (strong, nonatomic) UIPanGestureRecognizer *pan;
 @property (assign, nonatomic) BOOL lastPanStateIsEnd;
-@property (assign, nonatomic) BOOL cancelAnimationCompletion;
+
 @property (assign, nonatomic ,readonly) CGFloat maxOffset;
 @property (assign, nonatomic) CGFloat currentOffset;
 @property (strong, nonatomic ,readonly) UIView *menusView;
-@property (assign, nonatomic) NSInteger count;
+@property (assign, nonatomic) NSInteger menuItemCount;
 @end
 
 @implementation SliderCell
@@ -30,17 +30,15 @@
 - (void)prepare{
     self.clipsToBounds = false;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    _pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
+    _pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
     _pan.delegate = self;
     [self.contentView addGestureRecognizer:_pan];
 }
 
 - (void)pan:(UIPanGestureRecognizer *)pan{
-    if (!self.menuDelegate) {
-        return;
-    }
+    if (!self.menuDelegate) return;
+    
     if (_lastPanStateIsEnd && self.state == SliderMenuSlider && [SliderMenu.shared.currentCell isEqual:self]) {
-        _cancelAnimationCompletion = true;
         self.currentOffset = 0; //useful
         [pan setTranslation:CGPointMake(self.layer.presentationLayer.frame.origin.x, 0) inView:pan.view];
         [self move:self.layer.presentationLayer.frame.origin.x];
@@ -50,38 +48,30 @@
     
     CGFloat panX = [pan translationInView:pan.view].x;
     if ( self.state == SliderMenuClose && panX >= 0 && [SliderMenu.shared.currentCell isEqual:self]) {
-        
         return;
     }
     
-    CGFloat offsetX = panX + _currentOffset ;
-    
-    if ( offsetX > 0) {
-        offsetX = 0;
-    }
+    CGFloat offsetX = MIN(panX + _currentOffset ,0);
     
     _lastPanStateIsEnd = false;
     if (SliderMenu.shared.currentCell  && ![SliderMenu.shared.currentCell isEqual:self] ) {
-        
         [SliderMenu.shared.currentCell cancelPan];
-        
         if (SliderMenu.shared.currentCell.hidden) {
             [SliderMenu.shared.currentCell openMenu:false time:0 springX:0];
         }else{
             [SliderMenu.shared.currentCell openMenu:false time:0.35 springX:0];
         }
-        
-        SliderMenu.shared.currentCell = self;
-        
     }
-    
-    if (!_menusView.superview) {
+//            if (!_menusView.superview) {
+    if (self.state == SliderMenuClose) {
+        [_menusView removeFromSuperview];
+        _menusView = nil;
         [self addMenusForCell];
     }
+    SliderMenu.shared.currentCell = self;
     if (pan.state == UIGestureRecognizerStateBegan){
         [self.layer removeAllAnimations];
         [self removeAnimations];
-        
     }else if (pan.state == UIGestureRecognizerStateChanged){
         // 轻微右滑关闭。如果不需要可以注释掉该方法
         if (panX > 0 && [SliderMenu.shared.currentCell isEqual:self]) {
@@ -150,11 +140,6 @@
         
     } completion:^(BOOL finished) {
         self.menusView.alpha = 1;
-        if (self.cancelAnimationCompletion){
-            [self removeAnimations]; // useful
-            self.cancelAnimationCompletion = false;
-            return ;
-        }
         if (finished) {
             if (springX != 0 ) {
                 [UIView animateWithDuration:0.3 delay:0 options:options animations:^{
@@ -185,7 +170,7 @@
     CGFloat offsetx = x;
     CGFloat offsetWidth = 0.0;
     
-    for (int i = 1; i < _count; i++) {
+    for (int i = 1; i < _menuItemCount; i++) {
         UIView *v = [_menusView viewWithTag:100 + i];
         UIView *lastv = [_menusView viewWithTag:100 + i-1];
         offsetWidth += lastv.frame.size.width;
@@ -205,12 +190,11 @@
 
 - (void)addMenusForCell{
     
-    SliderMenu.shared.currentCell = self;
-    
+
     if(!_menusView  ){
-        NSIndexPath *indexPath = [self indexPath];
+        NSIndexPath *indexPath = [self menuItemIndexPath];
         NSArray *menuItems  = [self.menuDelegate sliderMenuItemsForIndexPath:indexPath];
-        _count = menuItems.count;
+        _menuItemCount = menuItems.count;
         _menusView = [UIView new];
         _maxOffset = 0.0;
         for (int i = 0; i < menuItems.count; i++) {
@@ -256,7 +240,7 @@
 
 - (void)didSelectMenu:(UIButton *)btn{
     if ([self.menuDelegate respondsToSelector:@selector(sliderMenuDidSelectIndex:atIndexPath:)]) {
-         NSIndexPath *indexPath = [self indexPath];
+         NSIndexPath *indexPath = [self menuItemIndexPath];
         if ([self.menuDelegate sliderMenuDidSelectIndex:btn.tag - 100 atIndexPath:indexPath]){
             [self close];
         }
@@ -304,7 +288,7 @@
     return [super hitTest:point withEvent:event];
 }
 
-- (NSIndexPath *)indexPath{
+- (NSIndexPath *)menuItemIndexPath{
     UITableView *tv = (UITableView *)self.superview;
     return  [tv indexPathForCell:self];
 }

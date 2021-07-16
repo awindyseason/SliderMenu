@@ -34,8 +34,8 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 @end
 
 /*
- * 继承于即可 => YourCell : SliderCell
- * 可适用于UICollectionViewCell => @interface SliderCell : UICollectionViewCell
+ * 继承SliderCell => YourCell : SliderCell
+ * UICollectionViewCell 需修改Slider或复制新建一个 CollectionSliderCell : UICollectionViewCell
 */
 
 @interface SliderCell : UITableViewCell
@@ -52,3 +52,22 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 - (void)close;
 
 @end
+
+/*
+ * UICollectionViewCell
+ */
+
+//@interface CollectionSliderCell : UICollectionViewCell
+//
+//@property (assign, nonatomic) SliderMenuState state;
+//@property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
+//
+///**
+// * @param open 打开 / 关闭
+// * @param time 时间
+// * @param springX 正数：右摇动； 负数：左摇动 ； 0：不spring 。数值代表幅度
+// */
+//- (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX;
+//- (void)close;
+//
+//@end
