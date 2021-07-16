@@ -1,9 +1,9 @@
 # SliderMenu 
 
-##UITableView/UICollectionView  的左滑菜单、侧滑菜单
-~使用非常简单
-~支持自定义按钮
-~优化手势动画的体验，有流畅的过度效果和小动画
+##UITableView/UICollectionView  左滑编辑、删除按钮、
+~使用简单
+~可自定义
+~流畅平滑
 
 
 
