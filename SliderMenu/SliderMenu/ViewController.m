@@ -10,7 +10,7 @@
 
 #import "SliderCell.h"
 #import "SliderMenu.h"
-
+#import "YourCell.h"
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,SliderMenuDelegate>
 
 @property (strong, nonatomic) UITableView *tv;
@@ -37,6 +37,7 @@
     _tv.tableFooterView = UIView.new;
     [self.view addSubview:_tv];
     [_tv registerClass:SliderCell.class forCellReuseIdentifier:@"slidercell"];
+    [_tv registerNib:[UINib nibWithNibName:@"YourCell" bundle:NSBundle.mainBundle] forCellReuseIdentifier:@"YourCell"];
     
 }
 
@@ -60,13 +61,21 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    SliderCell *cell = [_tv dequeueReusableCellWithIdentifier:@"slidercell"];
-    cell.menuDelegate = self;
-    
-    cell.textLabel.text = [_datas objectAtIndex:indexPath.row];
-    
-    return cell;
-    
+    if (indexPath.row < 3) {
+        SliderCell *cell = [_tv dequeueReusableCellWithIdentifier:@"slidercell"];
+        cell.menuDelegate = self;
+        
+        cell.textLabel.text = [_datas objectAtIndex:indexPath.row];
+        
+        return cell;
+        
+    }else{
+        YourCell *cell = [_tv dequeueReusableCellWithIdentifier:@"YourCell"];
+        cell.menuDelegate = self;
+        
+        return cell;
+    }
+   
 }
 
 // === SliderDelegate ===

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049FCC3326B2913000804A82 /* YourCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FCC3126B2913000804A82 /* YourCell.m */; };
+		049FCC3426B2913000804A82 /* YourCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049FCC3226B2913000804A82 /* YourCell.xib */; };
 		F849C981214A62B800030C85 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F849C980214A62B800030C85 /* AppDelegate.m */; };
 		F849C984214A62B800030C85 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F849C983214A62B800030C85 /* ViewController.m */; };
 		F849C987214A62B800030C85 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F849C985214A62B800030C85 /* Main.storyboard */; };
@@ -18,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		049FCC3026B2913000804A82 /* YourCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YourCell.h; sourceTree = "<group>"; };
+		049FCC3126B2913000804A82 /* YourCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YourCell.m; sourceTree = "<group>"; };
+		049FCC3226B2913000804A82 /* YourCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YourCell.xib; sourceTree = "<group>"; };
 		F849C97C214A62B800030C85 /* SliderMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SliderMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F849C97F214A62B800030C85 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F849C980214A62B800030C85 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -45,6 +50,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		049FCC2A26B28F7E00804A82 /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				049FCC3026B2913000804A82 /* YourCell.h */,
+				049FCC3126B2913000804A82 /* YourCell.m */,
+				049FCC3226B2913000804A82 /* YourCell.xib */,
+			);
+			path = Example;
+			sourceTree = "<group>";
+		};
 		F84778AB214B5DF80065022C /* SliderMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +94,7 @@
 				F849C980214A62B800030C85 /* AppDelegate.m */,
 				F849C982214A62B800030C85 /* ViewController.h */,
 				F849C983214A62B800030C85 /* ViewController.m */,
+				049FCC2A26B28F7E00804A82 /* Example */,
 				F84778AB214B5DF80065022C /* SliderMenu */,
 				F849C985214A62B800030C85 /* Main.storyboard */,
 				F849C988214A62BC00030C85 /* Assets.xcassets */,
@@ -146,6 +162,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049FCC3426B2913000804A82 /* YourCell.xib in Resources */,
 				F849C98C214A62BC00030C85 /* LaunchScreen.storyboard in Resources */,
 				F849C989214A62BC00030C85 /* Assets.xcassets in Resources */,
 				F849C987214A62B800030C85 /* Main.storyboard in Resources */,
@@ -159,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049FCC3326B2913000804A82 /* YourCell.m in Sources */,
 				F849C984214A62B800030C85 /* ViewController.m in Sources */,
 				F849C98F214A62BC00030C85 /* main.m in Sources */,
 				F84B56A52153926D008879B2 /* SliderCell.m in Sources */,
