@@ -10,6 +10,7 @@
 
 #import "SliderCell.h"
 #import "SliderMenu.h"
+#import "MJRefresh.h"
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,SliderMenuDelegate>
 
 @property (strong, nonatomic) UITableView *tv;
@@ -36,7 +37,19 @@
     _tv.tableFooterView = UIView.new;
     [self.view addSubview:_tv];
     [_tv registerClass:SliderCell.class forCellReuseIdentifier:@"slidercell"];
+    __weak typeof(self) ws = self;
+    _tv.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [ws performSelector:@selector(endRefreshing) withObject:nil afterDelay:1];
+    }];
     
+}
+- (void)endRefreshing{
+    _datas = @[].mutableCopy;
+    for (int i = 0; i < 5 ; i++) {
+        [_datas addObject:@(i).stringValue];
+    }
+    [self.tv.mj_header endRefreshing];
+    [self.tv reloadData];
 }
 - (void)close{
     [[SliderMenu shared].currentCell close];
