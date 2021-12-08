@@ -25,16 +25,17 @@
     
     self.navigationItem.title = @"SliderMenu";
     UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
-    self.navigationItem.rightBarButtonItem = rightBarItem;
+    UIBarButtonItem *reloadItem = [[UIBarButtonItem alloc]initWithTitle:@"reload" style:UIBarButtonItemStylePlain target:self action:@selector(reload)];
+    self.navigationItem.rightBarButtonItems = @[rightBarItem,reloadItem];
     _datas = @[].mutableCopy;
     for (int i = 0; i < 5 ; i++) {
         [_datas addObject:@(i).stringValue];
     }
     _tv = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    _tv.dataSource = self;
     _tv.rowHeight = 55;
+    _tv.dataSource = self;
     _tv.delegate = self;
-    _tv.tableFooterView = UIView.new;
+    _tv.tableFooterView = [[UIView alloc]init];
     [self.view addSubview:_tv];
     [_tv registerClass:SliderCell.class forCellReuseIdentifier:@"slidercell"];
     [_tv registerNib:[UINib nibWithNibName:@"YourCell" bundle:NSBundle.mainBundle] forCellReuseIdentifier:@"YourCell"];
@@ -44,7 +45,9 @@
 - (void)close{
     [[SliderMenu shared].currentCell close];
 }
-
+- (void)reload{
+    [self.tv reloadData];
+}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     // tableview滚动 ，menu关闭
     if ([SliderMenu shared].currentCell.state == SliderMenuOpen) {

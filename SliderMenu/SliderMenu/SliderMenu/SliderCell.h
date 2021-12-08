@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 @optional
 
 /**
- * @return 点击后是否自动关闭 ture：关闭 
+ * @return 点击后是否自动关闭 ture：关闭
  */
 - (BOOL)sliderMenuDidSelectIndex:(NSInteger)index atIndexPath:(NSIndexPath *)indexPath;
 
@@ -54,20 +54,17 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 @end
 
 /*
- * UICollectionViewCell
+ * UICollectionViewCell 方法一样 可以复制一个SliderCell 来继承UICollectionViewCell
  */
+/*
+@interface SliderCell : UICollectionViewCell
 
-//@interface CollectionSliderCell : UICollectionViewCell
-//
-//@property (assign, nonatomic) SliderMenuState state;
-//@property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
-//
-///**
-// * @param open 打开 / 关闭
-// * @param time 时间
-// * @param springX 正数：右摇动； 负数：左摇动 ； 0：不spring 。数值代表幅度
-// */
-//- (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX;
-//- (void)close;
-//
-//@end
+@property (assign, nonatomic) SliderMenuState state;
+@property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
+
+
+- (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX;
+- (void)close;
+
+@end
+*/
