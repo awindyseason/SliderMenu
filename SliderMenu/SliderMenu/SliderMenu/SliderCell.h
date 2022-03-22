@@ -8,7 +8,7 @@
 
 
 #import <UIKit/UIKit.h>
-
+#import "SliderMenu.h"
 typedef NS_ENUM(NSInteger,SliderMenuState) {
     SliderMenuClose, // 关闭
     SliderMenuSlider, // 滑动中

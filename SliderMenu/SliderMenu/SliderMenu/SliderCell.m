@@ -1,6 +1,6 @@
 
 #import "SliderCell.h"
-#import "SliderMenu.h"
+
 
 @interface SliderCell()<UIGestureRecognizerDelegate>
 
@@ -93,6 +93,7 @@
    
         [self addMenusForCell];
     }
+    
     if (pan.state == UIGestureRecognizerStateBegan){
         
         [self removeAnimations];
@@ -245,6 +246,7 @@
     NSArray *menuItems  = [self.menuDelegate sliderMenuItemsForIndexPath:indexPath];
     _menuCount = menuItems.count;
     _menusView = [UIView new];
+    _menusView.frame = CGRectMake(CGRectGetMaxX(self.frame), self.menuInsets.top, ABS(self.maxOffset), self.frame.size.height-self.menuInsets.top-self.menuInsets.bottom);
     _maxOffset = 0.0;
     for (int i = 0; i < menuItems.count; i++) {
         MenuItem *item = [menuItems objectAtIndex:i];
@@ -258,7 +260,7 @@
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.tag = 100 +i;
         btn.backgroundColor = item.bgcolor;
-        btn.frame = CGRectMake(0, 0, width, self.frame.size.height);
+        btn.frame = CGRectMake(0, 0, width, _menusView.frame.size.height);
         btn.titleLabel.font = item.font;
         [btn setTitleColor:item.titleColor forState:UIControlStateNormal];
         [btn setTitle:item.title forState:UIControlStateNormal];
@@ -268,7 +270,7 @@
         UIView *bgview = [UIView new];
         bgview.tag = 1000 + i;
         bgview.backgroundColor =  item.bgcolor;
-        bgview.frame = CGRectMake(self.maxOffset, 0, width *2, self.frame.size.height);
+        bgview.frame = CGRectMake(self.maxOffset, 0, width *2, _menusView.frame.size.height);
         [_menusView addSubview:bgview];
         
         UIView *lastBGview = [_menusView viewWithTag:1000 + i-1];
@@ -280,13 +282,15 @@
     }
     
     _maxOffset = -_maxOffset;
-    _menusView.frame = CGRectMake(CGRectGetMaxX(self.frame), 0, ABS(self.maxOffset), self.frame.size.height);
+    _menusView.frame = CGRectMake(CGRectGetMaxX(self.frame), self.menuInsets.top, ABS(self.maxOffset), self.frame.size.height-self.menuInsets.top-self.menuInsets.bottom);
     [self addSubview:_menusView];
     [_menusView layoutIfNeeded];
     //    }
     
 }
-
+- (UIEdgeInsets)menuInsets{
+    return UIEdgeInsetsZero;
+}
 - (void)didSelectMenu:(UIButton *)btn{
     if (self.state != SliderMenuOpen) {
         return;
