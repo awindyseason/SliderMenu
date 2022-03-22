@@ -1,4 +1,6 @@
 # SliderMenu 
+wechat-awindyseason
+交流探讨
 
 ##UITableView/UICollectionView  左滑编辑、删除按钮、
 ~使用简单
