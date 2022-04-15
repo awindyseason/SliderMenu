@@ -317,13 +317,7 @@
     return true;
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return true;
-}
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return true;
-}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [super touchesBegan:touches withEvent:event];
@@ -357,4 +351,69 @@
     return indexPath;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    NSArray *arr = [self sliderFailByViews];
+    for (UIView * view in arr) {
+        if ([view isEqual:otherGestureRecognizer.view]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// 默认return true (slidercell的pan手势优先级最高) ，如果要实现其他优先级手势，使用sliderFailByViews；
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    NSArray *arr = [self sliderFailByViews];
+    for (UIView * view in arr) {
+        if ([view isEqual:otherGestureRecognizer.view]) {
+            // slidercell return false 优先响应sliderFailByViews
+            return false;
+        }
+    }
+    if ([gestureRecognizer isEqual:self.pan] && [otherGestureRecognizer isEqual: self.currentNav.interactivePopGestureRecognizer] ) {
+        return false;
+    }
+    return true;
+}
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(nonnull UIGestureRecognizer *)otherGestureRecognizer{
+//
+//    if ([gestureRecognizer isEqual:self.pan] && [otherGestureRecognizer isEqual: self.currentNav.interactivePopGestureRecognizer] ) {
+//        return true;
+//    }
+//    return false;
+//}
+
+- (UINavigationController *)currentNav{
+    if (!_currentNav) {
+        _currentNav = [self currentViewController].navigationController;
+    }
+    return _currentNav;
+}
+- (UIViewController*)currentViewController{
+    
+    UIViewController* vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (1) {
+        if ([vc isKindOfClass:[UITabBarController class]]) {
+            vc = ((UITabBarController*)vc).selectedViewController;
+        }
+        
+        if ([vc isKindOfClass:[UINavigationController class]]) {
+            vc = ((UINavigationController*)vc).visibleViewController;
+        }
+        
+        if (vc.presentedViewController) {
+            vc = vc.presentedViewController;
+        }else{
+            break;
+        }
+    }
+    if ([vc isKindOfClass:UITabBarController.class]) {
+        vc = ((UITabBarController *)vc).selectedViewController;
+    }
+    return vc;
+    
+}
+- (NSArray *)sliderFailByViews{
+    return nil;
+}
 @end

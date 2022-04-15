@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
 */
 
 @interface SliderCell : UITableViewCell
-
+@property (nonatomic,weak) UINavigationController *currentNav;
 @property (assign, nonatomic) SliderMenuState state;
 @property (weak, nonatomic) NSObject<SliderMenuDelegate> *menuDelegate;
 
@@ -50,7 +50,9 @@ typedef NS_ENUM(NSInteger,SliderMenuState) {
  */
 - (void)openMenu:(BOOL)open time:(NSTimeInterval)time springX:(CGFloat)springX;
 - (void)close;
-
+- (UIEdgeInsets)menuInsets;
+// 子类实现，返回手势比slider优先的views 如sliderCell上的其他scrollview要优先滚动，解决手势冲突问题
+- (NSArray <UIView *>*)sliderFailByViews;
 @end
 
 /*
