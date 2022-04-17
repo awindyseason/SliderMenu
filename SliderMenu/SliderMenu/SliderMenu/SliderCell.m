@@ -351,22 +351,21 @@
     return indexPath;
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    NSArray *arr = [self sliderFailByViews];
-    for (UIView * view in arr) {
-        if ([view isEqual:otherGestureRecognizer.view]) {
-            return false;
-        }
-    }
-    return true;
-}
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+//    NSArray *arr = [self sliderFailByViews];
+//    for (UIView * view in arr) {
+//        if ([view isEqual:otherGestureRecognizer.view]) {
+//            return false;
+//        }
+//    }
+//    return true;
+//}
 
-// 默认return true (slidercell的pan手势优先级最高) ，如果要实现其他优先级手势，使用sliderFailByViews；
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     NSArray *arr = [self sliderFailByViews];
     for (UIView * view in arr) {
         if ([view isEqual:otherGestureRecognizer.view]) {
-            // slidercell return false 优先响应sliderFailByViews
             return false;
         }
     }
